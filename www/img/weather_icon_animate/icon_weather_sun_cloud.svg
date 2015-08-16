@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="icon_weather_sun_cloud.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient5342">
+      <stop
+         id="stop5344"
+         offset="0"
+         style="stop-color:#b3b3b3;stop-opacity:1;" />
+      <stop
+         id="stop5346"
+         offset="1"
+         style="stop-color:#ffda49;stop-opacity:1;" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="446.24763"
+     inkscape:cy="556.59339"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1303"
+     inkscape:window-height="744"
+     inkscape:window-x="63"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-28.3622)">
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 870.9898,938.9336 c 79.54486,0 144.4177,-64.87498 144.4177,-144.42309 0,-67.44609 -46.7688,-123.74628 -109.35677,-139.41214 -4.2856,-31.15729 -15.59773,-61.89898 -35.06093,-89.32661 -40.34581,-56.84499 -104.64668,-86.64781 -169.46117,-85.1512 -38.88866,0.90442 -78.58674,12.52407 -112.69587,36.73024 -48.45858,34.39813 -76.98405,86.38294 -83.47839,141.08747 -29.23336,-26.88929 -68.1761,-43.83641 -111.02628,-43.41219 -89.43714,0.88289 -161.16315,74.18403 -160.27856,163.62262 0.88439,89.44074 74.18054,161.1699 163.61771,160.2849"
+       id="path5318"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cscssccssc">
+      <animateTransform
+         id="cloud_anim"
+         attributeName="transform"
+         type="translate"
+         from="0 0"
+         to="1024 0"
+         begin="5s"
+         dur="15s"
+         repeatCount="0"
+         calcMode="spline"
+         keySplines="0.5, 0, 0, 0" />
+      <animateTransform
+         attributeName="transform"
+         type="translate"
+         from="-1024 0"
+         to="1024 0"
+         begin="cloud_anim.end"
+         dur="30s"
+         repeatCount="indefinite"
+         id="animateTransform12" />
+    </path>
+    <g
+       id="g13"
+       transform="translate(264.09,360.83)">
+      <path
+         style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none"
+         d="M 137.1025,28.362204 C 137.1025,104.08182 75.719618,165.4647 -1.9e-6,165.4647 -75.719618,165.4647 -137.1025,104.08182 -137.1025,28.362204 c 0,-75.719621 61.382882,-137.102504 137.1024981,-137.102504 75.7196199,0 137.1025019,61.382883 137.1025019,137.102504 z"
+         id="path2987"
+         inkscape:connector-curvature="0">
+		  <animateTransform
+		     id="sun_anim"
+		     attributeName="transform"
+		     type="scale"
+		     from="1"
+		     to="0.9"
+		     begin="5s"
+		     dur="2s"
+		     repeatCount="0" />
+		  <animateTransform
+		     id="sun_anim_up"
+		     attributeName="transform"
+		     type="scale"
+		     from="0.9"
+		     to="1.1"
+		     begin="sun_anim.end ; sun_anim_down.end"
+		     dur="4s"
+		     repeatCount="0"
+			 additive="sum" />
+
+		  <animateTransform
+		     id="sun_anim_down"
+		     attributeName="transform"
+		     type="scale"
+		     from="1.1"
+		     to="0.9"
+		     begin="sun_anim_up.end"
+		     dur="4s"
+		     repeatCount="0"
+			 additive="sum"  />
+		</path>
+    </g>
+    <path
+       style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none"
+       d="m 264.09371,133.75543 47.64133,95.28306 -95.28266,0 z"
+       id="rect2989"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" >
+
+        <animateTransform
+           attributeType="xml"
+           attributeName="transform"
+           type="rotate"
+           from="0 264.0895 390"
+           to="360 264.0895 390"
+		   begin="5s"
+           dur="9s"
+           repeatCount="indefinite" />
+	</path>
+    <path
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0"
+       id="path2994"
+       d="m 519.53169,389.194 -95.28194,47.64153 0,-95.28306 z"
+       style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none" >
+
+        <animateTransform
+           attributeType="xml"
+           attributeName="transform"
+           type="rotate"
+           from="0 264.0895 390"
+           to="360 264.0895 390"
+		   begin="5s"
+           dur="9s"
+           repeatCount="indefinite" />
+	</path>
+    <path
+       style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none"
+       d="m 264.09352,644.63257 -47.64098,-95.28306 95.28195,0 z"
+       id="path2998"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" >
+
+        <animateTransform
+           attributeType="xml"
+           attributeName="transform"
+           type="rotate"
+           from="0 264.0895 390"
+           to="360 264.0895 390"
+		   begin="5s"
+           dur="9s"
+           repeatCount="indefinite" />
+	</path>
+    <path
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0"
+       id="path3002"
+       d="m 8.65534,389.194 95.28195,-47.64153 0,95.28306 z"
+       style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none"  >
+
+        <animateTransform
+           attributeType="xml"
+           attributeName="transform"
+           type="rotate"
+           from="0 264.0895 390"
+           to="360 264.0895 390"
+		   begin="5s"
+           dur="9s"
+           repeatCount="indefinite" />
+	</path>
+    <path
+       style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none"
+       d="m 83.471361,208.57207 101.061769,33.68679 -67.3745,67.37356 z"
+       id="path3006"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" >
+
+        <animateTransform
+           attributeType="xml"
+           attributeName="transform"
+           type="rotate"
+           from="0 264.0895 390"
+           to="360 264.0895 390"
+		   begin="5s"
+           dur="9s"
+           repeatCount="indefinite" />
+	</path>
+    <path
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0"
+       id="path3010"
+       d="M 444.71561,208.57044 411.02822,309.63242 343.65459,242.25886 z"
+       style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none" >
+
+        <animateTransform
+           attributeType="xml"
+           attributeName="transform"
+           type="rotate"
+           from="0 264.0895 390"
+           to="360 264.0895 390"
+		   begin="5s"
+           dur="9s"
+           repeatCount="indefinite" />
+	</path>
+    <path
+       style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none"
+       d="M 444.71676,569.8143 343.65459,536.12752 411.02938,468.75395 z"
+       id="path3014"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" >
+
+        <animateTransform
+           attributeType="xml"
+           attributeName="transform"
+           type="rotate"
+           from="0 264.0895 390"
+           to="360 264.0895 390"
+		   begin="5s"
+           dur="9s"
+           repeatCount="indefinite" />
+	</path>
+    <path
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0"
+       id="path3018"
+       d="m 83.472875,569.81593 33.687385,-101.06198 67.37363,67.3752 z"
+       style="fill:#ffffff;fill-opacity:0.90196078;fill-rule:nonzero;stroke:none" >
+
+        <animateTransform
+           attributeType="xml"
+           attributeName="transform"
+           type="rotate"
+           from="0 264.0895 390"
+           to="360 264.0895 390"
+		   begin="5s"
+           dur="9s"
+           repeatCount="indefinite" />
+	</path>
+  </g>
+</svg>

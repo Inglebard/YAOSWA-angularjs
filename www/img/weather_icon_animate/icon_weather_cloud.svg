@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="icon_weather_cloud.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35355339"
+     inkscape:cx="1171.3997"
+     inkscape:cy="518.09148"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-28.3622)">
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 828.65868,826.69497 c 102.2822,0 185.69842,-83.42113 185.69842,-185.70786 0,-86.72334 -60.13725,-159.11951 -140.61557,-179.26137 -5.51062,-40.0647 -20.05625,-79.59449 -45.08285,-114.85961 C 776.78024,273.77078 694.09941,235.44985 610.75819,237.37474 560.75343,238.5541 509.70793,253.47728 465.84894,284.60409 403.53878,328.83239 366.8595,395.6792 358.50882,466.01989 320.91933,431.44555 270.84503,409.65257 215.74638,410.19801 100.74427,411.33528 8.5158803,505.58759 9.6533071,620.59041 10.790737,735.59954 105.03785,827.83013 220.04003,826.69497"
+       id="path5318"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cscssccssc">
+		<animateTransform id="fist_anim" attributeName="transform"
+			type="translate"
+			from="0 0"
+			to="1024 0"
+			begin="5s"
+			dur="15s"
+			repeatCount="0"
+		    calcMode="spline"
+		    keySplines="0.5, 0, 0, 0"
+		/>
+		<animateTransform attributeName="transform"
+			type="translate"
+			from="-1024 0"
+			to="1024 0"
+			begin="fist_anim.end"
+			dur="30s"
+			repeatCount="indefinite"
+		/>
+	</path>
+  </g>
+</svg>

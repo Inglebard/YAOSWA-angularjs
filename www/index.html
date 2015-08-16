@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" href="lib/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title>YAOSWA</title>
+    </head>
+    <body>
+    	<header class="{{getBackButtonClass()}}" id="header" ng-controller="HeaderCtrl" ng-show="getShowHeader()">    
+    		<span class="header_icon pull-left" ng-show="getShowBackButton()">
+    			<a href="#home">
+    				<i class="fa fa-chevron-left"></i>
+    			</a>
+    		</span>
+    		
+    		<span id="headertitle" class="pull-left">
+    			{{getHeaderTitle()}}
+    		</span>
+    		
+    		<span class="header_icon pull-right" ng-show="getShowAboutButton()">
+    			<a href="#about">
+    				<i class="fa fa-info-circle"></i>
+    			</a>
+    		</span>
+    		<span class="header_icon pull-right" ng-show="getShowSettingsButton()">
+    			<a href="#settings">
+    				<i class="fa fa-cog"></i>
+    			</a>
+    		</span>
+    	</header>
+    	
+        <div class="content main_content" id="content" ng-view >
+        </div>     
+    	<!--
+		<footer id="footer">  
+    		Powered by <a href="http://openweathermap.org">OpenWeatherMap</a>
+    	</footer>
+	    -->  
+	    
+		<div id="startLoadingOverlay" ng-style="{ 'display' : startLoadingOverlay }">
+			<div class="loading_overlay_wrapper">
+				<div class="image_wrapper">
+					<img src="img/application_icon/loader_animate.svg"/>
+				</div>
+			</div>
+		</div> 
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular-route.min.js"></script>
+        <script type="text/javascript" src="js/angular-sanitize.min.js"></script> 
+        <script type="text/javascript" src="js/lazy-image.min.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+        
+    </body>
+</html>

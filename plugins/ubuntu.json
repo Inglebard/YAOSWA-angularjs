@@ -1,0 +1,32 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Geolocation\"><param policy_group=\"location\" policy_version=\"1\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.inglebard.yaoswa"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.inglebard.yaoswa"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.inglebard.yaoswa"
+        }
+    },
+    "dependent_plugins": {}
+}

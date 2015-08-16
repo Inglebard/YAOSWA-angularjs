@@ -1,0 +1,288 @@
+<div class="home_template" >
+	<div class="view">
+		<div ng-hide="errorOverlay()">
+			<div class="weather_header" data-my-weather-header>
+				<div class="weather_header_wrapper">
+					<div>
+						<span class="current_weather_location">{{ getCityCountryTitle() }}</span>
+					</div>
+					<div class="separator" ng-class="{invisible: !getCityCountryTitle()}">
+						<span></span>
+					</div>
+					<div class="weather_chooser">
+						<span class="weather_type">{{weather_header_title}}</span>
+						<span class="header_icon pull-left" ng-show="!isMinTab()">
+			    			<a ng-click="prevTab()">
+			    				<i class="fa fa-chevron-left"></i>
+			    			</a>
+			    		</span>
+						<span class="header_icon pull-right" ng-show="!isMaxTab()">
+			    			<a ng-click="nextTab()">
+			    				<i class="fa fa-chevron-right"></i>
+			    			</a>
+			    		</span>
+			    		<div class="clear_both"></div>
+					</div>
+				</div>
+			</div>
+			<div class="tab_list" ng-style="{ 'top': getHeaderHeight() + 'px' }">	
+				<div class="tab" ng-show="isActiveTab(0)">					
+					<div class="weather_data_wrapper">
+						<div class="current_weather weather_data weather_{{currentWeather.weather_id}} {{currentWeather.customInfo.day_status}}"> 
+							<div class="summary_info_current_weather summary_info_weather">			
+								<div ng-show="currentWeather.dt">
+									<span class="current_weather_date">{{currentWeather.dt | date:'EEEE d MMMM'}}</span>		
+								</div>					
+								<div ng-show="currentWeather.dt">
+									<span class="current_weather_date">{{currentWeather.dt | date:'HH:mm'}}</span>		
+								</div>		
+								<div class="current_weather_logo_wrapper" ng-show="currentWeather.customInfo.image">
+									<img class="current_weather_logo" ng-src="{{currentWeather.customInfo.image}}?lazyload={{lazyLoadCache}}"/>
+								</div>		
+								<div ng-show="currentWeather.description">
+									<span class="current_weather_desc">{{currentWeather.description}}</span>	
+								</div>		
+							</div>
+							<div class="detail_info_current_weather detail_info_weather" ng-show="currentWeather">
+								<div class="separator">
+									<span></span>
+								</div>
+								<div class="row">					
+									<div class="col-xs-6" ng-show="currentWeather.sunrise">		
+										<div>
+											<img class="detail_icon detail_icon_sunrise" src="img/details_icon/icon_sunrise.svg" />
+											<span>{{currentWeather.sunrise | date:'HH:mm:ss'}}</span>		
+										</div>
+									</div>
+									<div class="col-xs-6" ng-show="currentWeather.sunset">
+										<img class="detail_icon detail_icon_sunset" src="img/details_icon/icon_sunset.svg" />	
+										<span>{{currentWeather.sunset | date:'HH:mm:ss'}}</span>		
+									</div>	
+									<div class="col-xs-6" ng-show="currentWeather.temp">	
+										<img class="detail_icon detail_icon_temp" src="img/details_icon/icon_temp.svg" />	
+										<span>{{currentWeather.temp}} {{currentWeather.tempUnitLab}}</span>						
+									</div>
+									<div class="col-xs-6" ng-show="typeof(currentWeather.clouds)!='undefined' || currentWeather.clouds!=null">			
+										<img class="detail_icon detail_icon_cloud" src="img/details_icon/icon_cloud.svg" />	
+										<span>{{currentWeather.clouds}} {{currentWeather.percUnitLab}}</span>
+									</div>
+									<div class="col-xs-6" ng-show="currentWeather.temp_min">	
+										<img class="detail_icon detail_icon_temp_min" src="img/details_icon/icon_temp_min.svg" />
+										<span>{{currentWeather.temp_min}} {{currentWeather.tempUnitLab}}</span>						
+									</div>	
+									<div class="col-xs-6" ng-show="currentWeather.temp_max">	
+										<img class="detail_icon detail_icon_temp_max" src="img/details_icon/icon_temp_max.svg" />
+										<span>{{currentWeather.temp_max}} {{currentWeather.tempUnitLab}}</span>						
+									</div>	
+									<div class="col-xs-6" ng-show="currentWeather.pressure">	
+										<img class="detail_icon detail_icon_pressure" src="img/details_icon/icon_pressure.svg" />			
+										<span>{{currentWeather.pressure}} {{currentWeather.pressureUnitLab}}</span>	
+									</div>
+									<div class="col-xs-6" ng-show="currentWeather.humidity">			
+										<img class="detail_icon detail_icon_humidity" src="img/details_icon/icon_humidity.svg" />	
+										<span>{{currentWeather.humidity}} {{currentWeather.percUnitLab}}</span>
+									</div>
+									<div class="col-xs-6" ng-show="currentWeather.wind_deg">		
+										<img class="detail_icon detail_icon_wind_orientation" src="img/details_icon/icon_wind_orientation.svg" />		
+										<span>{{currentWeather.wind_deg | number:0}}° ({{currentWeather.wind_orient}})</span>
+									</div>
+									<div class="col-xs-6" ng-show="currentWeather.wind_speed">			
+										<img class="detail_icon detail_icon_wind_speed" src="img/details_icon/icon_wind_speed.svg" />	
+										<span>{{currentWeather.wind_speed | number:2 }} {{currentWeather.speedUnitLab}}</span>
+									</div>			
+									<div class="col-xs-6" ng-show="currentWeather.rain">			
+										<img class="detail_icon detail_icon_rain" src="img/details_icon/icon_rain.svg" />	
+										<span>{{currentWeather.rain}} {{currentWeather.precUnitLab}}</span>
+									</div>	
+									<div class="col-xs-6" ng-show="currentWeather.snow">			
+										<img class="detail_icon detail_icon_snow" src="img/details_icon/icon_snow.svg" />	
+										<span>{{currentWeather.snow}} {{currentWeather.precUnitLab}}</span>
+									</div>	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="tab" ng-show="isActiveTab(1)">
+					<div class="weather_data_wrapper" afkl-image-container>
+						<div class="hourly_weather weather_data weather_{{weather.weather_id}} {{weather.customInfo.day_status}}" ng-repeat="weather in hourlyWeather.list" ng-click="toggleWeatherDetail($event)"> 
+							<div class="summary_info_hourly_weather summary_info_weather">
+								<div class="row row_weather">
+									<div class="col-xs-4">
+										<div>
+											<div class="hourly_weather_logo_wrapper">
+												<div class="hourly_weather_logo" afkl-lazy-image-options='{"offset": 150}' afkl-lazy-image="{{weather.customInfo.image}}?numhourly={{$index}}-{{lazyLoadCache}}"></div>
+											</div>					
+										</div>					
+									</div>
+									<div class="col-xs-4">
+										<div>
+											<span class="hourly_weather_date_day">{{weather.dt | date:'EEE d'}}</span>		
+											<span class="hourly_weather_date">{{weather.dt | date:'HH:mm'}}</span>		
+										</div>			
+									</div>
+									<div class="col-xs-4">
+										<div class="vcenter">
+											<div class="align-left">
+												<span class="hourly_weather_desc">{{weather.description}}</span>	
+												<span class="hourly_weather_temp">{{weather.temp}} {{hourlyWeather.tempUnitLab}}</span>
+											</div>
+										</div>
+									</div>				
+								</div>
+							</div>
+							<div class="detail_info_hourly_weather detail_info_weather">
+								<div class="separator">
+									<span></span>
+								</div>
+								<div class="row">	
+									<div class="col-xs-6" ng-show="weather.temp">	
+										<img class="detail_icon detail_icon_temp" src="img/details_icon/icon_temp.svg" />	
+										<span>{{weather.temp}} {{hourlyWeather.tempUnitLab}}</span>						
+									</div>
+									<div class="col-xs-6" ng-show="typeof(weather.clouds)!='undefined' || weather.clouds!=null">			
+										<img class="detail_icon detail_icon_cloud" src="img/details_icon/icon_cloud.svg" />	
+										<span>{{weather.clouds | number}} {{hourlyWeather.percUnitLab}}</span>
+									</div>
+									<div class="col-xs-6" ng-show="weather.temp_min">	
+										<img class="detail_icon detail_icon_temp_min" src="img/details_icon/icon_temp_min.svg" />
+										<span>{{weather.temp_min}} {{hourlyWeather.tempUnitLab}}</span>						
+									</div>	
+									<div class="col-xs-6" ng-show="weather.temp_max">	
+										<img class="detail_icon detail_icon_temp_max" src="img/details_icon/icon_temp_max.svg" />
+										<span>{{weather.temp_max}} {{hourlyWeather.tempUnitLab}}</span>						
+									</div>	
+									<div class="col-xs-6" ng-show="weather.pressure">	
+										<img class="detail_icon detail_icon_pressure" src="img/details_icon/icon_pressure.svg" />			
+										<span>{{weather.pressure}} {{hourlyWeather.pressureUnitLab}}</span>	
+									</div>
+									<div class="col-xs-6" ng-show="weather.humidity">			
+										<img class="detail_icon detail_icon_humidity" src="img/details_icon/icon_humidity.svg" />	
+										<span>{{weather.humidity}} {{hourlyWeather.percUnitLab}}</span>
+									</div>
+									<div class="col-xs-6" ng-show="weather.wind_deg">		
+										<img class="detail_icon detail_icon_wind_orientation" src="img/details_icon/icon_wind_orientation.svg" />		
+										<span>{{weather.wind_deg | number:0}}° ({{weather.wind_orient}}) </span>
+									</div>
+									<div class="col-xs-6" ng-show="weather.wind_speed">			
+										<img class="detail_icon detail_icon_wind_speed" src="img/details_icon/icon_wind_speed.svg" />	
+										<span>{{weather.wind_speed | number:2}} {{hourlyWeather.speedUnitLab}}</span>
+									</div>			
+									<div class="col-xs-6" ng-show="weather.rain">			
+										<img class="detail_icon detail_icon_rain" src="img/details_icon/icon_rain.svg" />	
+										<span>{{weather.rain}} {{hourlyWeather.precUnitLab}}</span>
+									</div>	
+									<div class="col-xs-6" ng-show="weather.snow">			
+										<img class="detail_icon detail_icon_snow" src="img/details_icon/icon_snow.svg" />	
+										<span>{{weather.snow}} {{hourlyWeather.precUnitLab}}</span>
+									</div>	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab" ng-show="isActiveTab(2)">
+					<div class="weather_data_wrapper" afkl-image-container>
+						<div class="daily_weather weather_data weather_{{weather.weather_id}} {{weather.customInfo.day_status}}" ng-repeat="weather in dailyWeather.list" ng-click="toggleWeatherDetail($event)"> 
+							<div class="summary_info_daily_weather summary_info_weather">
+								<div class="row row_weather">
+									<div class="col-xs-4">
+										<div>
+											<div class="daily_weather_logo_wrapper">
+												<div class="daily_weather_logo" afkl-lazy-image-options='{"offset": 150}' afkl-lazy-image="{{weather.customInfo.image}}?numdaily={{$index}}-{{lazyLoadCache}}"></div>
+											</div>					
+										</div>					
+									</div>
+									<div class="col-xs-4">
+										<div>
+											<span class="daily_weather_date_day">{{weather.dt | date:'EEE d'}}</span>		
+											<span class="daily_weather_date">{{weather.dt | date:'HH:mm'}}</span>		
+										</div>			
+									</div>
+									<div class="col-xs-4">
+										<div class="vcenter">
+											<div class="align-left">
+												<span class="daily_weather_desc">{{weather.description}}</span>	
+												<span class="daily_weather_temp">{{weather.temp}} {{dailyWeather.tempUnitLab}}</span>
+											</div>
+										</div>
+									</div>				
+								</div>
+							</div>
+							<div class="detail_info_daily_weather detail_info_weather">
+								<div class="separator">
+									<span></span>
+								</div>
+								<div class="row">	
+									<div class="col-xs-6" ng-show="weather.temp">	
+										<img class="detail_icon detail_icon_temp" src="img/details_icon/icon_temp.svg" />	
+										<span>{{weather.temp}} {{dailyWeather.tempUnitLab}}</span>						
+									</div>
+									<div class="col-xs-6" ng-show="typeof(weather.clouds)!='undefined' || weather.clouds!=null">			
+										<img class="detail_icon detail_icon_cloud" src="img/details_icon/icon_cloud.svg" />	
+										<span>{{weather.clouds}} {{dailyWeather.percUnitLab}}</span>
+									</div>
+									<div class="col-xs-6" ng-show="weather.temp_min">	
+										<img class="detail_icon detail_icon_temp_min" src="img/details_icon/icon_temp_min.svg" />
+										<span>{{weather.temp_min}} {{dailyWeather.tempUnitLab}}</span>						
+									</div>	
+									<div class="col-xs-6" ng-show="weather.temp_max">	
+										<img class="detail_icon detail_icon_temp_max" src="img/details_icon/icon_temp_max.svg" />
+										<span>{{weather.temp_max}} {{dailyWeather.tempUnitLab}}</span>						
+									</div>	
+									<div class="col-xs-6" ng-show="weather.pressure">	
+										<img class="detail_icon detail_icon_pressure" src="img/details_icon/icon_pressure.svg" />			
+										<span>{{weather.pressure}} {{dailyWeather.pressureUnitLab}}</span>	
+									</div>
+									<div class="col-xs-6" ng-show="weather.humidity">			
+										<img class="detail_icon detail_icon_humidity" src="img/details_icon/icon_humidity.svg" />	
+										<span>{{weather.humidity}} {{dailyWeather.percUnitLab}}</span>
+									</div>
+									<div class="col-xs-6" ng-show="weather.wind_deg">		
+										<img class="detail_icon detail_icon_wind_orientation" src="img/details_icon/icon_wind_orientation.svg" />		
+										<span>{{weather.wind_deg | number:0}}° ({{weather.wind_orient}})</span>
+									</div>
+									<div class="col-xs-6" ng-show="weather.wind_speed">			
+										<img class="detail_icon detail_icon_wind_speed" src="img/details_icon/icon_wind_speed.svg" />	
+										<span>{{weather.wind_speed | number:2}} {{dailyWeather.speedUnitLab}}</span>
+									</div>		
+									<div class="col-xs-6" ng-show="weather.rain">			
+										<img class="detail_icon detail_icon_rain" src="img/details_icon/icon_rain.svg" />	
+										<span>{{weather.rain}} {{dailyWeather.precUnitLab}}</span>
+									</div>	
+									<div class="col-xs-6" ng-show="weather.snow">			
+										<img class="detail_icon detail_icon_snow" src="img/details_icon/icon_snow.svg" />	
+										<span>{{weather.snow}} {{dailyWeather.precUnitLab}}</span>
+									</div>	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="errorOverlay" class="container-centered" ng-show="errorOverlay()">
+			<div class="elem-centered">
+				<div class="text_wrapper">
+					<span ng-bind-html="errorOverlaymsg"></span>
+				</div>
+				<div class="button_wrapper">
+					<button ng-click="refresh()">Rafraîchir</button>
+				</div>
+				<div  class="button_wrapper">
+	    			<a href="#settings">
+						<button>Paramètres</button>
+	    			</a>
+				</div>
+			</div>
+		</div> 
+		<div id="loadingOverlay" ng-show="loaderOverlay">
+			<div class="loading_overlay_wrapper">
+				<div class="image_wrapper">
+					<img ng-src="{{imgsrcoverlay}}"/>
+				</div>
+			</div>
+		</div> 
+	</div>
+</div>	

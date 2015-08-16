@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="icon_weather_sun_cloud_night.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.25"
+     inkscape:cx="1623.7248"
+     inkscape:cy="656.63108"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1303"
+     inkscape:window-height="744"
+     inkscape:window-x="63"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-28.3622)">
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 328.15974,156.16741 c -105.38347,0 -190.82114,85.43475 -190.82114,190.81882 0,105.38407 85.43767,190.82325 190.82114,190.82325 11.38707,0 22.53554,-1.24046 33.37409,-3.14325 -80.51139,-24.48587 -138.9932,-99.16403 -138.9932,-187.68 0,-88.51597 58.48181,-163.19191 138.9932,-187.67778 -10.83855,-1.905 -21.98702,-3.14104 -33.37409,-3.14104 z"
+       id="path2987"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g11"
+       transform="translate(82.5,157.7)">
+      <path
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="M 23.50333,52.22834 3.8261665,45.42888 -12.930382,57.7837 -12.544271,36.96848 -29.4725,24.84993 -9.5566862,18.78489 -3.2623555,-1.05961 8.6601747,16.00721 29.4785,15.86117 16.931229,32.47409 z"
+         id="path3001"
+         inkscape:connector-curvature="0">
+		  <animateTransform
+		     id="star1_anim"
+		     attributeName="transform"
+		     type="scale"
+		     from="1"
+		     to="0.9"
+		     begin="5s"
+		     dur="1s"
+		     repeatCount="0" />
+		  <animateTransform
+		     id="star1_anim_up"
+		     attributeName="transform"
+		     type="scale"
+		     from="0.9"
+		     to="1.1"
+		     begin="star1_anim.end ; star1_anim_down.end"
+		     dur="2s"
+		     repeatCount="0"
+			 additive="sum" />
+
+		  <animateTransform
+		     id="star1_anim_down"
+		     attributeName="transform"
+		     type="scale"
+		     from="1.1"
+		     to="0.9"
+		     begin="star1_anim_up.end"
+		     dur="2s"
+		     repeatCount="0"
+			 additive="sum"  />
+		</path>
+    </g>
+    <g
+       id="g14"
+       transform="translate(418.22,300.472)">
+      <path
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="M 23.92758,101.7052 -14.66808,67.81167 -64.46927,80.39111 -44.16132,33.21075 -71.5145,-10.26573 -20.3678,-5.53124 12.52816,-44.98062 23.83063,5.12577 71.51462,24.22121 27.35322,50.4542 z"
+         id="path3003"
+         inkscape:connector-curvature="0">
+		  <animateTransform
+		     id="star2_anim"
+		     attributeName="transform"
+		     type="scale"
+		     from="1"
+		     to="0.7"
+		     begin="5s"
+		     dur="5s"
+		     repeatCount="0" />
+		  <animateTransform
+		     id="star2_anim_up"
+		     attributeName="transform"
+		     type="scale"
+		     from="0.7"
+		     to="1.3"
+		     begin="star2_anim.end ; star2_anim_down.end"
+		     dur="10s"
+             keyTimes="0"
+		     repeatCount="0"
+			 additive="sum" />
+
+		  <animateTransform
+		     id="star2_anim_down"
+		     attributeName="transform"
+		     type="scale"
+		     from="1.3"
+		     to="0.7"
+		     begin="star2_anim_up.end"
+		     dur="10s"
+             keyTimes="0"
+		     repeatCount="0"
+			 additive="sum"  />
+		</path>
+    </g>
+    <g
+       id="g17"
+       transform="translate(53.51,419.35)">
+      <path
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="M 48.979677,46.97561 14.551199,47.87273 -4.227809,76.7427 -15.719998,44.27648 -48.98,35.33788 -21.654079,14.37554 -23.430873,-20.01877 4.949669,-0.50799 37.111547,-12.82625 27.325767,20.19441 z"
+         id="path3005"
+         inkscape:connector-curvature="0">
+		  <animateTransform
+		     id="star3_anim"
+		     attributeName="transform"
+		     type="scale"
+		     from="1"
+		     to="0.6"
+		     begin="5s"
+		     dur="2s"
+		     repeatCount="0" />
+		  <animateTransform
+		     id="star3_anim_up"
+		     attributeName="transform"
+		     type="scale"
+		     from="0.6"
+		     to="1.1"
+		     begin="star3_anim.end ; star3_anim_down.end"
+		     dur="4s"
+             keyTimes="0"
+		     repeatCount="0"
+			 additive="sum" />
+
+		  <animateTransform
+		     id="star3_anim_down"
+		     attributeName="transform"
+		     type="scale"
+		     from="1.1"
+		     to="0.6"
+		     begin="star3_anim_up.end"
+		     dur="4s"
+             keyTimes="0"
+		     repeatCount="0"
+			 additive="sum"  />
+		</path>
+    </g>
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 858.44434,883.31643 c 87.73388,0 159.28526,-71.55267 159.28526,-159.28892 0,-74.39019 -51.58354,-136.48871 -120.61488,-153.76439 -4.72676,-34.3675 -17.20346,-68.27426 -38.67038,-98.52386 -44.49937,-62.69881 -115.41991,-95.56668 -186.90697,-93.91642 -42.89221,1.01895 -86.67714,13.81124 -124.29776,40.51223 -53.44732,37.93383 -84.90943,95.27428 -92.07238,155.60957 -32.2429,-29.65595 -75.19474,-48.34709 -122.45629,-47.88191 -98.64456,0.97465 -177.75465,81.82189 -176.77901,180.4698 0.97564,98.64791 81.81732,177.7607 180.4619,176.7839"
+       id="path5318"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cscssccssc">
+      <animateTransform
+         id="cloud_anim"
+         attributeName="transform"
+         type="translate"
+         from="0 0"
+         to="1024 0"
+         begin="5s"
+         dur="15s"
+         repeatCount="0"
+         calcMode="spline"
+         keySplines="0.5, 0, 0, 0" />
+      <animateTransform
+         attributeName="transform"
+         type="translate"
+         from="-1024 0"
+         to="1024 0"
+         begin="cloud_anim.end"
+         dur="30s"
+         repeatCount="indefinite"
+         id="animateTransform13" />
+    </path>
+  </g>
+</svg>
