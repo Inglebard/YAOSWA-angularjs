@@ -31,10 +31,10 @@
 						<div class="current_weather weather_data weather_{{currentWeather.weather_id}} {{currentWeather.customInfo.day_status}}"> 
 							<div class="summary_info_current_weather summary_info_weather">			
 								<div ng-show="currentWeather.dt">
-									<span class="current_weather_date">{{currentWeather.dt | date:'EEEE d MMMM'}}</span>		
+									<span class="current_weather_date">{{currentWeather.dt | amDateFormat:'dddd DD MMMM'}}</span>		
 								</div>					
 								<div ng-show="currentWeather.dt">
-									<span class="current_weather_date">{{currentWeather.dt | date:'HH:mm'}}</span>		
+									<span class="current_weather_date">{{currentWeather.dt | amDateFormat:'HH:mm'}}</span>		
 								</div>		
 								<div class="current_weather_logo_wrapper" ng-show="currentWeather.customInfo.image">
 									<img class="current_weather_logo" ng-src="{{currentWeather.customInfo.image}}?lazyload={{lazyLoadCache}}"/>
@@ -51,12 +51,12 @@
 									<div class="col-xs-6" ng-show="currentWeather.sunrise">		
 										<div>
 											<img class="detail_icon detail_icon_sunrise" src="img/details_icon/icon_sunrise.svg" />
-											<span>{{currentWeather.sunrise | date:'HH:mm:ss'}}</span>		
+											<span>{{currentWeather.sunrise | amDateFormat:'HH:mm:ss'}}</span>		
 										</div>
 									</div>
 									<div class="col-xs-6" ng-show="currentWeather.sunset">
 										<img class="detail_icon detail_icon_sunset" src="img/details_icon/icon_sunset.svg" />	
-										<span>{{currentWeather.sunset | date:'HH:mm:ss'}}</span>		
+										<span>{{currentWeather.sunset | amDateFormat:'HH:mm:ss'}}</span>		
 									</div>	
 									<div class="col-xs-6" ng-show="currentWeather.temp">	
 										<img class="detail_icon detail_icon_temp" src="img/details_icon/icon_temp.svg" />	
@@ -118,8 +118,8 @@
 									</div>
 									<div class="col-xs-4">
 										<div>
-											<span class="hourly_weather_date_day">{{weather.dt | date:'EEE d'}}</span>		
-											<span class="hourly_weather_date">{{weather.dt | date:'HH:mm'}}</span>		
+											<span class="hourly_weather_date_day">{{weather.dt | amDateFormat:'ddd DD'}}</span>		
+											<span class="hourly_weather_date">{{weather.dt | amDateFormat:'HH:mm'}}</span>		
 										</div>			
 									</div>
 									<div class="col-xs-4">
@@ -196,8 +196,8 @@
 									</div>
 									<div class="col-xs-4">
 										<div>
-											<span class="daily_weather_date_day">{{weather.dt | date:'EEE d'}}</span>		
-											<span class="daily_weather_date">{{weather.dt | date:'HH:mm'}}</span>		
+											<span class="daily_weather_date_day">{{weather.dt | amDateFormat:'ddd DD'}}</span>		
+											<span class="daily_weather_date">{{weather.dt | amDateFormat:'HH:mm'}}</span>		
 										</div>			
 									</div>
 									<div class="col-xs-4">

@@ -3,13 +3,13 @@
 		<div class="">
 			<form>
 				<div class="setting_section_header">
-					<span>Localisation</span>
+					<span translate>Localisation</span>
 				</div>
 				<div class="input_control_text">
 					<div class="input_control_text_label_desc_icon row" ng-click="toggleSettingData($event)">
 						<div class="col-xs-10 input_control_text_label_desc">
 							<div class="input_control_text_label">
-								<span>City</span>						
+								<span translate>City</span>						
 							</div>
 							<div class="input_control_text_desc" ng-show="getDynamicDesc('city')"> 
 								<span>{{getDynamicDesc('city')}}</span>				
@@ -29,7 +29,7 @@
 					<div class="input_control_checkbox_label_desc_data row">
 						<div class="col-xs-10 input_control_checkbox_label_desc">
 							<div class="input_control_checkbox_label">
-								<span>Accurate</span>						
+								<span translate>Accurate</span>						
 							</div>
 							<div class="input_control_checkbox_desc" ng-show="getDynamicDesc('accurate')"> 
 								<span>{{getDynamicDesc('accurate')}}</span>				
@@ -46,7 +46,7 @@
 					<div class="input_control_checkbox_label_desc_data row">
 						<div class="col-xs-10 input_control_checkbox_label_desc">
 							<div class="input_control_checkbox_label">
-								<span>Auto positionning</span>						
+								<span translate>Auto positionning</span>						
 							</div>
 							<div class="input_control_checkbox_desc" ng-show="getDynamicDesc('geolocate')"> 
 								<span>{{getDynamicDesc('geolocate')}}</span>				
@@ -61,13 +61,13 @@
 				</div>
 				
 				<div class="setting_section_header">
-					<span>Units</span>
+					<span translate>Units</span>
 				</div>		
 				<div class="input_control_select">
 					<div class="input_control_select_label_desc_icon row" ng-click="toggleSettingData($event)">
 						<div class="col-xs-10 input_control_select_label_desc">
 							<div class="input_control_select_label">
-								<span>Temperature</span>						
+								<span translate>Temperature</span>						
 							</div>
 							<div class="input_control_select_desc" ng-show="getDynamicDesc('tempunit')"> 
 								<span>{{getDynamicDesc('tempunit')}}</span>				
@@ -87,7 +87,7 @@
 					<div class="input_control_select_label_desc_icon row" ng-click="toggleSettingData($event)">
 						<div class="col-xs-10 input_control_select_label_desc">
 							<div class="input_control_select_label">
-								<span>Speed</span>						
+								<span translate>Speed</span>						
 							</div>
 							<div class="input_control_select_desc" ng-show="getDynamicDesc('speedunit')"> 
 								<span>{{getDynamicDesc('speedunit')}}</span>				
@@ -105,13 +105,13 @@
 				</div>
 				
 				<div class="setting_section_header">
-					<span>Results</span>
+					<span translate>Results</span>
 				</div>		
 				<div class="input_control_text">
 					<div class="input_control_text_label_desc_icon row" ng-click="toggleSettingData($event)">
 						<div class="col-xs-10 input_control_text_label_desc">
 							<div class="input_control_text_label">
-								<span>Max Results</span>						
+								<span translate>Max Results</span>						
 							</div>
 							<div class="input_control_text_desc" ng-show="getDynamicDesc('cnt')"> 
 								<span>{{getDynamicDesc('cnt')}}</span>				
@@ -128,14 +128,13 @@
 					</div>
 				</div>				
 				<div class="setting_section_header">
-					<span>Languages</span>
+					<span translate>Languages</span>
 				</div>
-				<!--
 				<div class="input_control_select">
 					<div class="input_control_select_label_desc_icon row" ng-click="toggleSettingData($event)">
 						<div class="col-xs-10 input_control_select_label_desc">
 							<div class="input_control_select_label">
-								<span>Application language</span>						
+								<span translate>Application language</span>						
 							</div>
 							<div class="input_control_select_desc" ng-show="getDynamicDesc('applanguage')"> 
 								<span ng-bind-html="getDynamicDesc('applanguage')"></span>				
@@ -150,13 +149,12 @@
 					<div class="input_control_select_data">
 						<select ng-model="appLanguageId" ng-options="item.label_setting for item in appLanguageList track by item.id" ></select>
 					</div>
-				</div>
-				-->
+				</div>				
 				<div class="input_control_select">
 					<div class="input_control_select_label_desc_icon row" ng-click="toggleSettingData($event)">
 						<div class="col-xs-10 input_control_select_label_desc">
 							<div class="input_control_select_label">
-								<span>Weather Language</span>						
+								<span translate>Weather Language</span>						
 							</div>
 							<div class="input_control_select_desc" ng-show="getDynamicDesc('weatherlanguage')"> 
 								<span ng-bind-html="getDynamicDesc('weatherlanguage')"></span>				
@@ -174,7 +172,7 @@
 				</div>
 				
 				<div class="form_submit">
-					<button ng-click="saveSetting()">Save</button>
+					<button ng-click="saveSetting()" translate>Save</button>
 				</div>
 			</form>
 		</div>

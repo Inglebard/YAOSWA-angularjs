@@ -18,14 +18,17 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.inglebard.yaoswa"
-        },
         "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.inglebard.yaoswa"
+            "PACKAGE_NAME": "yaoswa.inglebard"
         },
         "cordova-plugin-globalization": {
-            "PACKAGE_NAME": "com.inglebard.yaoswa"
+            "PACKAGE_NAME": "yaoswa.inglebard"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "yaoswa.inglebard"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "yaoswa.inglebard"
         }
     },
     "dependent_plugins": {}
