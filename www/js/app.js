@@ -1,4 +1,4 @@
-var yaoswa = angular.module('yaoswa',['ngRoute','ngSanitize','afkl.lazyImage','angularMoment','gettext']);
+var yaoswa = angular.module('yaoswa',['ngRoute','ngSanitize','afkl.lazyImage','angularMoment','gettext','LocalStorageModule']);
 
 yaoswa.config(function($routeProvider) {
 	$routeProvider
@@ -7,6 +7,12 @@ yaoswa.config(function($routeProvider) {
 		.when('/settings',{title: 'Settings',templateUrl :'templates/settings.html', controller: 'SettingCtrl'})
 		.otherwise('/yaoswa',{title: 'YAOSWA',redirectTo :'/yaoswa'});
 });
+
+yaoswa.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setPrefix('YAOSWA');
+});
+
 yaoswa.run(function (gettextCatalog) {
     // Load the strings automatically during initialization.
     gettextCatalog.setStrings("fr", {
@@ -271,7 +277,7 @@ yaoswa.service('HeaderSrvc',['$rootScope', function($rootScope) {
 	};
 }]);
 
-yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
+yaoswa.service('SettingsSrvc',['gettextCatalog','localStorageService', function(gettextCatalog,localStorageService) {
 	
     this.defaultCity="Limoges,FR";
     this.defaultIsAccurate=false;
@@ -469,22 +475,23 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	
 	this.getCity= function()
 	{
-		return localStorage.getItem("city") || this.defaultCity;
+		return localStorageService.get("city") || this.defaultCity;
 	};
 	this.setCity= function(city)
 	{
-		localStorage.setItem("city",city);
+		localStorageService.set("city",city);
 	};
 	
 	this.getIsAccurate= function()
 	{
-		if(localStorage.getItem("isAccurate"))
+		var isAccurate=localStorageService.get("isAccurate");
+		if(isAccurate)
 		{
-			if(localStorage.getItem("isAccurate")=="true")
+			if(isAccurate=="true" || isAccurate === true)
 			{
 				return true;
 			}			
-			else if(localStorage.getItem("isAccurate")=="false")
+			else if(isAccurate=="false" || isAccurate === false)
 			{
 				return false;
 			}
@@ -500,19 +507,19 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	};
 	this.setIsAccurate= function(isaccurate)
 	{
-		localStorage.setItem("isAccurate",isaccurate);
+		localStorageService.set("isAccurate",isaccurate);
 	};
 	
 	this.getIsGeolocate= function()
 	{
-		
-		if(localStorage.getItem("isGeolocate"))
+		var isGeolocate=localStorageService.get("isGeolocate");
+		if(isGeolocate)
 		{
-			if(localStorage.getItem("isGeolocate")=="true")
+			if(isGeolocate=="true" || isGeolocate === true)
 			{
 				return true;
 			}			
-			else if(localStorage.getItem("isGeolocate")=="false")
+			else if(isGeolocate=="false" || isGeolocate === false)
 			{
 				return false;
 			}
@@ -528,32 +535,32 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	};
 	this.setIsGeolocate= function(isgeolocate)
 	{
-		localStorage.setItem("isGeolocate",isgeolocate);
+		localStorageService.set("isGeolocate",isgeolocate);
 	};
 	
 	this.getTempUnitId= function()
 	{
-		return localStorage.getItem("tempunitid") || this.defaultTempUnitId;
+		return localStorageService.get("tempunitid") || this.defaultTempUnitId;
 	};
 	this.setTempUnitId= function(tempunitid)
 	{
-		localStorage.setItem("tempunitid",tempunitid);
+		localStorageService.set("tempunitid",tempunitid);
 	};
 	
 	
 	this.getSpeedUnitId= function()
 	{
-		return localStorage.getItem("speedunitid") || this.defaultSpeedUnitId;
+		return localStorageService.get("speedunitid") || this.defaultSpeedUnitId;
 	};
 	this.setSpeedUnitId= function(speedunitid)
 	{
-		localStorage.setItem("speedunitid",speedunitid);
+		localStorageService.set("speedunitid",speedunitid);
 	};
 
 	this.getAppLanguageId= function()
 	{
 		var appLanguageList = this.getAppLanguageList();
-	    var applanguageid = localStorage.getItem("applanguageid") ;
+	    var applanguageid = localStorageService.get("applanguageid") ;
 	    
 	    if (applanguageid)
 	    {
@@ -569,13 +576,13 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	};
 	this.setAppLanguageId= function(applanguageid)
 	{
-		localStorage.setItem("applanguageid",applanguageid);
+		localStorageService.set("applanguageid",applanguageid);
 	};
 
 	this.getWeatherLanguageId= function()
 	{
 		var weatherLanguageList = this.getWeatherLanguageList();
-	    var weatherlanguageid = localStorage.getItem("weatherlanguageid") ;
+	    var weatherlanguageid = localStorageService.get("weatherlanguageid") ;
 	    
 	    if (weatherlanguageid)
 	    {
@@ -591,11 +598,11 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	};
 	this.setWeatherLanguageId= function(weatherlanguageid)
 	{
-		localStorage.setItem("weatherlanguageid",weatherlanguageid);
+		localStorageService.set("weatherlanguageid",weatherlanguageid);
 	};	
 	
 	this.isLanguageSet= function() {
-		if(localStorage.getItem("applanguageid") == null || localStorage.getItem("weatherlanguageid") == null)
+		if(localStorageService.get("applanguageid") == null || localStorageService.get("weatherlanguageid") == null)
 		{
 			return false;
 		}
@@ -604,20 +611,20 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	
 	this.getCnt= function()
 	{
-		return localStorage.getItem("cnt") || this.defaultCnt;
+		return localStorageService.get("cnt") || this.defaultCnt;
 	};
 	this.setCnt= function(cnt)
 	{
-		localStorage.setItem("cnt",cnt);
+		localStorageService.set("cnt",cnt);
 	};
 	
 	this.getLanguage= function()
 	{
-		return localStorage.getItem("language") || this.defaultLanguage;
+		return localStorageService.get("language") || this.defaultLanguage;
 	};
 	this.setLanguage= function(language)
 	{
-		localStorage.setItem("language",language);
+		localStorageService.set("language",language);
 	};
 	
 	this.getApiId= function()
