@@ -2097,10 +2097,12 @@ document.addEventListener('deviceready',_ready,false);
 function _ready() {	
 	if(!window.deviceReady)
 	{
+		/* Not necessary
 		if(typeof(cordova)!=='undefined')
 		{
 			window.open = cordova.InAppBrowser.open;			
 		}
+		*/
 		angular.bootstrap(document, ['yaoswa']);	
 	}
 	window.deviceReady = true;
