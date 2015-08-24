@@ -14,15 +14,15 @@ For example:
 
 var arr = [
   { name: 'Steve', age: 18, color: 'red' },
-  { name: 'Louis', age: 21, color: 'blue' }, //*
+  { name: 'Louis', age: 21, color: 'blue' }, 
   { name: 'Mike', age: 20, color: 'green' },
-  { name: 'Greg', age: 21, color: 'blue' }, //*
+  { name: 'Greg', age: 21, color: 'blue' }, 
   { name: 'Josh', age: 18, color: 'red' }
 ];
 
 console.log(filter(arr, { age: 21, color: 'blue' }));
-//^ {age:21, color:'blue', name:'Louis}
-//  {age:21, color:'blue', name:'Greg'}
+{age:21, color:'blue', name:'Louis}
+{age:21, color:'blue', name:'Greg'}
 	
 end JS def
 */
@@ -675,7 +675,7 @@ yaoswa.service('SettingsSrvc',['gettextCatalog','localStorageService', function(
 	};	
 	
 	this.isLanguageSet= function() {
-		if(localStorageService.get("applanguageid") == null || localStorageService.get("weatherlanguageid") == null)
+		if(localStorageService.get("applanguageid") === null || localStorageService.get("weatherlanguageid") === null)
 		{
 			return false;
 		}
@@ -761,7 +761,7 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 			weatherObj.tempUnitLab=gettextCatalog.getString(SettingsSrvc.getTempUnit().unit);
 			weatherObj.speedUnitLab=gettextCatalog.getString(SettingsSrvc.getSpeedUnit().unit);
 			
-			if(type_weather==0)
+			if(type_weather===0)
 			{										
 				weatherObj.dt=HTTPresponse.dt*1000;
 				weatherObj.city=HTTPresponse.name;
@@ -830,7 +830,7 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 					weatherObj.wind_speed=UtilsSrvc.getSpeedData(temp_unit_id,speed_unit_id,HTTPresponse.wind.speed);	
 				}
 			}
-			if(type_weather==1)
+			if(type_weather===1)
 			{
 				if(typeof(HTTPresponse.city) !== "undefined")
 				{					
@@ -906,7 +906,7 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 					}
 				}				
 			}		
-			if(type_weather==2)
+			if(type_weather===2)
 			{
 				if(typeof(HTTPresponse.city) !== "undefined")
 				{					
@@ -922,7 +922,7 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 				if(typeof(HTTPresponse.list) !== "undefined")
 				{
 					weatherObj.list=new Array();			
-					for(var i in HTTPresponse.list)
+					for(var j in HTTPresponse.list)
 					{
 						weatherObj.list[i]=new Object();
 						weatherObj.list[i].dt=HTTPresponse.list[i].dt*1000;
@@ -1042,7 +1042,7 @@ yaoswa.service('WeatherSrvc', ['SettingsSrvc','CordovaFact','$http','$q', functi
 		param.apiId = SettingsSrvc.getApiId();		
 		param.lang = SettingsSrvc.getWeatherLanguage().label;
 		
-		if(param.accurate==true)
+		if(param.accurate===true)
 		{
 			param.type="accurate";
 		}
@@ -1196,19 +1196,19 @@ yaoswa.service('UtilsSrvc', [ 'gettextCatalog','SettingsSrvc', function(gettextC
 		speed_data = speed_data || 0 ;		
 		var speed=0;
 		
-		if(temp_unit_id == 0 || temp_unit_id == 2)
+		if(temp_unit_id === 0 || temp_unit_id === 2)
 		{
 			speed_data=this.convertmphtoms(speed_data);
 		}
-        if(speed_unit_id==0)
+        if(speed_unit_id===0)
 		{
         	speed=speed_data;
 		}
-        else if (speed_unit_id==1)
+        else if (speed_unit_id===1)
         {
         	speed=this.mpsToKph(speed_data);
 		}
-        else if (speed_unit_id==2)
+        else if (speed_unit_id===2)
         {
         	speed=this.mpsToMilesph(speed_data);
         } 
@@ -1225,11 +1225,11 @@ yaoswa.service('UtilsSrvc', [ 'gettextCatalog','SettingsSrvc', function(gettextC
 	{
 		precip_unit_id=precip_unit_id||0;
 		var precip=0;
-        if(precip_unit_id==0)
+        if(precip_unit_id===0)
 		{
         	precip=precip_data;
 		}
-        else if (precip_unit_id==1)
+        else if (precip_unit_id===1)
         {
         	precip=this.mmToIn(precip_data);
 		}
@@ -1817,7 +1817,7 @@ function ($scope,gettextCatalog,WeatherSrvc,HeaderSrvc,WeatherFact) {
 	};
 	
 	$scope.isReadyTab = function(index) {
-		if($scope.activeTab==index && $scope.loaderOverlay==false)
+		if($scope.activeTab==index && $scope.loaderOverlay===false)
 		{
 			return true;
 		}		
@@ -1993,18 +1993,18 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 	{	
 		if(key == "city")
 		{
-			if($scope.city==null || $scope.city=='')
+			if($scope.city===null || String($scope.city).trim()==='')
 			{
 				return gettextCatalog.getString("No city set.");
 			}
 			else
 			{
-				return gettextCatalog.getString("Current city set : {{CITY}}.", { CITY: $scope.city });
+				return gettextCatalog.getString("Current city set : {{CITY}}.", { CITY: String($scope.city).trim() });
 			}
 		}		
 		if(key == "accurate")
 		{
-			if($scope.accurate == false)
+			if($scope.accurate === false)
 			{
 				return gettextCatalog.getString("Will search the closest city.");
 			}
@@ -2015,7 +2015,7 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 		}
 		if(key == "geolocate")
 		{
-			if($scope.geolocate==false)
+			if($scope.geolocate===false)
 			{
 				return gettextCatalog.getString("Will use the registered city.");
 			}
@@ -2043,13 +2043,13 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 		
 		if(key == "cnt")
 		{
-			if($scope.city==null)
+			if($scope.nbCnt===null || String($scope.nbCnt).trim()==='')
 			{
 				return gettextCatalog.getString("Will use default max number of results.");		
 			}
 			else
 			{
-				return gettextCatalog.getString("Max number of results if available : {{NUMBER}}.",{ NUMBER : $scope.nbCnt });		
+				return gettextCatalog.getString("Max number of results if available : {{NUMBER}}.",{ NUMBER : String($scope.nbCnt).trim() });		
 			}
 		}
 		return null;
@@ -2072,14 +2072,14 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 	
 	$scope.saveSetting = function()
 	{
-		SettingsSrvc.setCity($scope.city);
+		SettingsSrvc.setCity(String($scope.city).trim());
 		SettingsSrvc.setIsAccurate($scope.accurate);
 		SettingsSrvc.setIsGeolocate($scope.geolocate);
 		SettingsSrvc.setTempUnitId($scope.tempUnit.id);
 		SettingsSrvc.setSpeedUnitId($scope.speedUnit.id);
 		SettingsSrvc.setAppLanguageId($scope.appLanguage.id);
 		SettingsSrvc.setWeatherLanguageId($scope.weatherLanguage.id);
-		SettingsSrvc.setCnt($scope.nbCnt);
+		SettingsSrvc.setCnt(String($scope.nbCnt).trim());
 		
 		amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
     	gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
