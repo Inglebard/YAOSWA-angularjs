@@ -92,11 +92,11 @@
 									</div>			
 									<div class="col-xs-6" ng-show="currentWeather.rain">			
 										<img class="detail_icon detail_icon_rain" src="img/details_icon/icon_rain.svg" />	
-										<span>{{currentWeather.rain}} {{currentWeather.precUnitLab}}</span>
+										<span>{{currentWeather.rain | number:2}} {{currentWeather.precUnitLab}}</span>
 									</div>	
 									<div class="col-xs-6" ng-show="currentWeather.snow">			
 										<img class="detail_icon detail_icon_snow" src="img/details_icon/icon_snow.svg" />	
-										<span>{{currentWeather.snow}} {{currentWeather.precUnitLab}}</span>
+										<span>{{currentWeather.snow | number:2}} {{currentWeather.precUnitLab}}</span>
 									</div>	
 								</div>
 							</div>
@@ -171,11 +171,11 @@
 									</div>			
 									<div class="col-xs-6" ng-show="weather.rain">			
 										<img class="detail_icon detail_icon_rain" src="img/details_icon/icon_rain.svg" />	
-										<span>{{weather.rain}} {{hourlyWeather.precUnitLab}}</span>
+										<span>{{weather.rain | number:2}} {{hourlyWeather.precUnitLab}}</span>
 									</div>	
 									<div class="col-xs-6" ng-show="weather.snow">			
 										<img class="detail_icon detail_icon_snow" src="img/details_icon/icon_snow.svg" />	
-										<span>{{weather.snow}} {{hourlyWeather.precUnitLab}}</span>
+										<span>{{weather.snow | number:2}} {{hourlyWeather.precUnitLab}}</span>
 									</div>	
 								</div>
 							</div>
@@ -249,11 +249,11 @@
 									</div>		
 									<div class="col-xs-6" ng-show="weather.rain">			
 										<img class="detail_icon detail_icon_rain" src="img/details_icon/icon_rain.svg" />	
-										<span>{{weather.rain}} {{dailyWeather.precUnitLab}}</span>
+										<span>{{weather.rain | number:2}} {{dailyWeather.precUnitLab}}</span>
 									</div>	
 									<div class="col-xs-6" ng-show="weather.snow">			
 										<img class="detail_icon detail_icon_snow" src="img/details_icon/icon_snow.svg" />	
-										<span>{{weather.snow}} {{dailyWeather.precUnitLab}}</span>
+										<span>{{weather.snow | number:2}} {{dailyWeather.precUnitLab}}</span>
 									</div>	
 								</div>
 							</div>
