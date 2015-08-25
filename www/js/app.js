@@ -924,46 +924,46 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 					weatherObj.list=new Array();			
 					for(var j in HTTPresponse.list)
 					{
-						weatherObj.list[i]=new Object();
-						weatherObj.list[i].dt=HTTPresponse.list[i].dt*1000;
-						weatherObj.list[i].description=HTTPresponse.list[i].description;						
+						weatherObj.list[j]=new Object();
+						weatherObj.list[j].dt=HTTPresponse.list[j].dt*1000;
+						weatherObj.list[j].description=HTTPresponse.list[j].description;						
 						
 						
 						
-						if(typeof(HTTPresponse.list[i].temp) !== "undefined")
+						if(typeof(HTTPresponse.list[j].temp) !== "undefined")
 						{
-							weatherObj.list[i].temp=HTTPresponse.list[i].temp.day;
-							weatherObj.list[i].temp_min=HTTPresponse.list[i].temp.min;
-							weatherObj.list[i].temp_max=HTTPresponse.list[i].temp.max;
+							weatherObj.list[j].temp=HTTPresponse.list[j].temp.day;
+							weatherObj.list[j].temp_min=HTTPresponse.list[j].temp.min;
+							weatherObj.list[j].temp_max=HTTPresponse.list[j].temp.max;
 						}
 						
-						if(typeof(HTTPresponse.list[i].sys) !== "undefined")
+						if(typeof(HTTPresponse.list[j].sys) !== "undefined")
 						{
-							weatherObj.list[i].pod="d";
+							weatherObj.list[j].pod="d";
 						}
 						
-						if(typeof(HTTPresponse.list[i].weather) !== "undefined")
+						if(typeof(HTTPresponse.list[j].weather) !== "undefined")
 						{
-							weatherObj.list[i].description=HTTPresponse.list[i].weather[0].description;
-							weatherObj.list[i].weather_id=HTTPresponse.list[i].weather[0].id;	
-							weatherObj.list[i].customInfo=UtilsSrvc.getCustomWeatherInfo(weatherObj.list[i].weather_id,weatherObj.list[i].pod);	
+							weatherObj.list[j].description=HTTPresponse.list[j].weather[0].description;
+							weatherObj.list[j].weather_id=HTTPresponse.list[j].weather[0].id;	
+							weatherObj.list[j].customInfo=UtilsSrvc.getCustomWeatherInfo(weatherObj.list[j].weather_id,weatherObj.list[j].pod);	
 							
-							if(typeof(weatherObj.list[i].customInfo.description) !== "undefined" )
+							if(typeof(weatherObj.list[j].customInfo.description) !== "undefined" )
 							{
-								weatherObj.list[i].description=weatherObj.list[i].customInfo.description;						
+								weatherObj.list[j].description=weatherObj.list[j].customInfo.description;						
 							}
 							
 						}
-						weatherObj.list[i].clouds=HTTPresponse.list[i].clouds;				
-						weatherObj.list[i].pressure=HTTPresponse.list[i].pressure;
-						weatherObj.list[i].humidity=HTTPresponse.list[i].humidity;		
-						weatherObj.list[i].rain=HTTPresponse.list[i].rain;
-						weatherObj.list[i].snow=HTTPresponse.list[i].snow;
-						weatherObj.list[i].wind_deg=HTTPresponse.list[i].deg;
-						weatherObj.list[i].wind_orient=UtilsSrvc.getOrientationFromDegree(weatherObj.list[i].wind_deg);
+						weatherObj.list[j].clouds=HTTPresponse.list[j].clouds;				
+						weatherObj.list[j].pressure=HTTPresponse.list[j].pressure;
+						weatherObj.list[j].humidity=HTTPresponse.list[j].humidity;		
+						weatherObj.list[j].rain=HTTPresponse.list[j].rain;
+						weatherObj.list[j].snow=HTTPresponse.list[j].snow;
+						weatherObj.list[j].wind_deg=HTTPresponse.list[j].deg;
+						weatherObj.list[j].wind_orient=UtilsSrvc.getOrientationFromDegree(weatherObj.list[j].wind_deg);
 						
-						weatherObj.list[i].wind_gust=UtilsSrvc.getSpeedData(speed_unit_id,HTTPresponse.list[i].gust);
-						weatherObj.list[i].wind_speed=UtilsSrvc.getSpeedData(speed_unit_id,HTTPresponse.list[i].wind_speed);						
+						weatherObj.list[j].wind_gust=UtilsSrvc.getSpeedData(speed_unit_id,HTTPresponse.list[j].gust);
+						weatherObj.list[j].wind_speed=UtilsSrvc.getSpeedData(speed_unit_id,HTTPresponse.list[j].wind_speed);						
 					}
 				}				
 			}		
