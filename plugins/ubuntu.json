@@ -11,6 +11,10 @@
                         {
                             "xml": "<feature name=\"Geolocation\"><param policy_group=\"location\" policy_version=\"1\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"AndroidPersistentFileLocation\" value=\"Internal\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -28,6 +32,9 @@
             "PACKAGE_NAME": "yaoswa.inglebard"
         },
         "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "yaoswa.inglebard"
+        },
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "yaoswa.inglebard"
         }
     },
