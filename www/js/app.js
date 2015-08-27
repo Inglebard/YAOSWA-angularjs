@@ -1,17 +1,34 @@
-var yaoswa = angular.module('yaoswa',['ngRoute','ngSanitize','afkl.lazyImage','angularMoment','gettext']);
+/*
+begin JS def
+*/
+function filter(arr, criteria) {
+	return arr.filter(function(obj) {
+		return Object.keys(criteria).every(function(c) {
+			return obj[c] == criteria[c];
+		});
+	});
+}
+
+/*	
+end JS def
+*/
+var yaoswa = angular.module('yaoswa',['ngRoute','ngSanitize','ngCordova','afkl.lazyImage','angularMoment','gettext']);
 
 yaoswa.config(function($routeProvider) {
 	$routeProvider
-		.when('/yaoswa',{title: 'YAOSWA',templateUrl :'templates/home.html', controller: 'HomeCtrl'})
+		.when('/yaoswa',{title: 'YAOSWA',templateUrl :'templates/home.html',controller: 'HomeCtrl'})
 		.when('/about',{title: 'About',templateUrl :'templates/about.html', controller: 'AboutCtrl'})
 		.when('/settings',{title: 'Settings',templateUrl :'templates/settings.html', controller: 'SettingCtrl'})
 		.otherwise('/yaoswa',{title: 'YAOSWA',redirectTo :'/yaoswa'});
 });
+
+
 yaoswa.run(function (gettextCatalog) {
     // Load the strings automatically during initialization.
     gettextCatalog.setStrings("fr", {
         "Settings" : "Paramètres" ,
 		"About" : "Á Propos",
+		"Refresh" : "Rafraichir",
 		"standard" : "standard",
 		"Kelvin (K)" : "Kelvin (K)",
 		"K" : "K",
@@ -106,93 +123,109 @@ yaoswa.run(['$location','$rootScope','gettextCatalog','HeaderSrvc', function($lo
     });
 }]);
 
-yaoswa.run(['$window','$rootScope','amMoment','gettextCatalog','CordovaFact','SettingsSrvc', function($window,$rootScope,amMoment,gettextCatalog,CordovaFact,SettingsSrvc) {
-	$rootScope.startLoadingOverlay="none";	
-	var appLanguageList=SettingsSrvc.getAppLanguageList();
-	var weatherLanguageList=SettingsSrvc.getWeatherLanguageList();
-	if(!SettingsSrvc.isLanguageSet())
+yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMoment','gettextCatalog','SettingsSrvc', function($window,$rootScope,$cordovaGlobalization,$cordovaFile,amMoment,gettextCatalog,SettingsSrvc) {
+	
+	this.init = function ()
 	{
-		CordovaFact.getGlobalization().then(
-			function(locale){
-				var alternate_locale;
-				var can_alternate=false;
-				
-				var localeVal = locale["value"];
-				if(localeVal.indexOf("_") > -1)
-				{
-					can_alternate=true;
-					alternate_locale=localeVal.split("_")[0];
-				}
-				
-				var app_language_detect;
-				var app_alternate_language_detect;
-				
-				var weather_language_detect;
-				var weather_alternate_language_detect;
-				
-				var default_language_id;
-				
-				for(appLanguage in appLanguageList)	
-				{
-					if(localeVal==appLanguageList[appLanguage]["label"])
+		var appLanguageList=SettingsSrvc.getAppLanguageList();
+		var weatherLanguageList=SettingsSrvc.getWeatherLanguageList();
+		if(!SettingsSrvc.isLanguageSet())
+		{
+			$cordovaGlobalization.getLocaleName().then(
+				function(locale){
+					var alternate_locale;
+					var can_alternate=false;
+					
+					var localeVal = locale["value"];
+					if(localeVal.indexOf("_") > -1)
 					{
-						app_language_detect=appLanguageList[appLanguage]["id"];
+						can_alternate=true;
+						alternate_locale=localeVal.split("_")[0];
 					}
-					if(can_alternate)
+					
+					var app_language_detect;
+					var app_alternate_language_detect;
+					
+					var weather_language_detect;
+					var weather_alternate_language_detect;
+					
+					var default_language_id;
+					
+					for(appLanguage in appLanguageList)	
 					{
-						if(alternate_locale==appLanguageList[appLanguage]["label"])
+						if(localeVal==appLanguageList[appLanguage]["label"])
 						{
-							app_alternate_language_detect=appLanguageList[appLanguage]["id"];				
+							app_language_detect=appLanguageList[appLanguage]["id"];
+						}
+						if(can_alternate)
+						{
+							if(alternate_locale==appLanguageList[appLanguage]["label"])
+							{
+								app_alternate_language_detect=appLanguageList[appLanguage]["id"];				
+							}
 						}
 					}
-				}
-				
-				for(weatherLanguage in weatherLanguageList)	
-				{
-					if(localeVal==weatherLanguageList[weatherLanguage]["label"])
+					
+					for(weatherLanguage in weatherLanguageList)	
 					{
-						weather_language_detect=weatherLanguageList[weatherLanguage]["id"];
-					}
-					if(can_alternate)
-					{
-						if(alternate_locale==weatherLanguageList[weatherLanguage]["label"])
+						if(localeVal==weatherLanguageList[weatherLanguage]["label"])
 						{
-							weather_alternate_language_detect=weatherLanguageList[weatherLanguage]["id"];				
+							weather_language_detect=weatherLanguageList[weatherLanguage]["id"];
 						}
+						if(can_alternate)
+						{
+							if(alternate_locale==weatherLanguageList[weatherLanguage]["label"])
+							{
+								weather_alternate_language_detect=weatherLanguageList[weatherLanguage]["id"];				
+							}
+						}
+					}	
+					weather_language_detect= weather_language_detect || weather_alternate_language_detect;
+					app_language_detect= app_language_detect || app_alternate_language_detect;
+					
+					if(!weather_language_detect)
+					{
+						weather_language_detect=default_language_id;
 					}
-				}	
-				weather_language_detect= weather_language_detect || weather_alternate_language_detect;
-				app_language_detect= app_language_detect || app_alternate_language_detect;
-				
-				if(!weather_language_detect)
-				{
-					weather_language_detect=default_language_id;
+					if(!app_language_detect)
+					{
+						app_language_detect=default_language_id;
+					}
+					
+					SettingsSrvc.setAppLanguageId(app_language_detect);
+					SettingsSrvc.setWeatherLanguageId(weather_language_detect);
+					amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
+				    gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
+	
+				},
+				function(){							
+					SettingsSrvc.setAppLanguageId(0);
+					SettingsSrvc.setWeatherLanguageId(0);				
+					amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
+				    gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
 				}
-				if(!app_language_detect)
-				{
-					app_language_detect=default_language_id;
-				}
-				
-				SettingsSrvc.setAppLanguageId(app_language_detect);
-				SettingsSrvc.setWeatherLanguageId(weather_language_detect);
-				amMoment.changeLocale(weatherLanguageList[app_language_detect]["label"]);
-			    gettextCatalog.setCurrentLanguage(weatherLanguageList[app_language_detect]["label"]);
-
-			},
-			function(){							
-				SettingsSrvc.setAppLanguageId(0);
-				SettingsSrvc.setWeatherLanguageId(0);				
-				amMoment.changeLocale(weatherLanguageList[0]["label"]);
-			    gettextCatalog.setCurrentLanguage(weatherLanguageList[0]["label"]);
-			}
-		);
-	}
-	else
+			);
+		}
+		else
+		{
+			amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
+	    	gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);		
+		}	
+		$rootScope.startLoadingOverlay="none";
+	};
+	
+	var objParam={};
+	try
 	{
-		amMoment.changeLocale(weatherLanguageList[SettingsSrvc.getAppLanguageId()]["label"]);
-    	gettextCatalog.setCurrentLanguage(weatherLanguageList[SettingsSrvc.getAppLanguageId()]["label"]);
-		
+		objParam=JSON.parse(window.yaoswaconfig);
 	}
+	catch(e)
+	{
+		console.log("Not parsable");
+	}
+	SettingsSrvc.setSettingsFromObj(objParam);
+	this.init();
+	
 }]);
 
 
@@ -282,6 +315,7 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
     this.defaultWeatherLanguageId=0;
     this.defaultCnt=14;
     this.defaultLanguage="en";
+    this.settings = {};
 
 	this.apiId = "26e1b3965e3ffa342a675e4b6b735832";
 	
@@ -469,22 +503,23 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	
 	this.getCity= function()
 	{
-		return localStorage.getItem("city") || this.defaultCity;
+		return this.settings.city || this.defaultCity;
 	};
 	this.setCity= function(city)
 	{
-		localStorage.setItem("city",city);
+		this.settings.city=city;
 	};
 	
 	this.getIsAccurate= function()
 	{
-		if(localStorage.getItem("isAccurate"))
+		var isAccurate=this.settings.isaccurate;
+		if(typeof(isAccurate)!=="undefined")
 		{
-			if(localStorage.getItem("isAccurate")=="true")
+			if(isAccurate==="true" || isAccurate === true)
 			{
 				return true;
 			}			
-			else if(localStorage.getItem("isAccurate")=="false")
+			else if(isAccurate==="false" || isAccurate === false)
 			{
 				return false;
 			}
@@ -500,19 +535,19 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	};
 	this.setIsAccurate= function(isaccurate)
 	{
-		localStorage.setItem("isAccurate",isaccurate);
+		this.settings.isaccurate=isaccurate;
 	};
 	
 	this.getIsGeolocate= function()
 	{
-		
-		if(localStorage.getItem("isGeolocate"))
+		var isGeolocate=this.settings.isgeolocate;
+		if(typeof(isGeolocate)!=="undefined")
 		{
-			if(localStorage.getItem("isGeolocate")=="true")
+			if(isGeolocate==="true" || isGeolocate === true)
 			{
 				return true;
 			}			
-			else if(localStorage.getItem("isGeolocate")=="false")
+			else if(isGeolocate==="false" || isGeolocate === false)
 			{
 				return false;
 			}
@@ -528,74 +563,143 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	};
 	this.setIsGeolocate= function(isgeolocate)
 	{
-		localStorage.setItem("isGeolocate",isgeolocate);
+		this.settings.isgeolocate=isgeolocate;
 	};
 	
+	
 	this.getTempUnitId= function()
-	{
-		return localStorage.getItem("tempunitid") || this.defaultTempUnitId;
+	{		
+		var TempList = this.getTempList();
+		if(typeof(this.settings.tempunitid)!=="undefined")
+		{
+		    var tempUnit=filter(TempList,{id:this.settings.tempunitid});	    
+		    if(typeof(tempUnit[0])!="undefined")
+		    {
+		    	return tempUnit[0].id;
+		    }			
+		}
+	    return this.defaultTempUnitId;
+	};
+	this.getTempUnit= function()
+	{		
+		var TempList = this.getTempList();
+		if(typeof(this.settings.tempunitid)!=="undefined")
+		{
+		    var tempUnit=filter(TempList,{id:this.settings.tempunitid});	    
+		    if(typeof(tempUnit[0])!="undefined")
+		    {
+		    	return tempUnit[0];
+		    }	    
+		}
+	    return filter(TempList,{id:0})[0];
 	};
 	this.setTempUnitId= function(tempunitid)
 	{
-		localStorage.setItem("tempunitid",tempunitid);
+		this.settings.tempunitid=tempunitid;
 	};
 	
 	
 	this.getSpeedUnitId= function()
-	{
-		return localStorage.getItem("speedunitid") || this.defaultSpeedUnitId;
+	{		
+		var speedList = this.getSpeedList();
+		if(typeof(this.settings.speedunitid)!=="undefined")
+		{
+		    var speedUnit=filter(speedList,{id:this.settings.speedunitid});	    
+		    if(typeof(speedUnit[0])!="undefined")
+		    {
+		    	return speedUnit[0].id;
+		    }	    			
+		}
+	    return this.defaultSpeedUnitId;
 	};
+	
+	this.getSpeedUnit= function()
+	{		
+		var speedList = this.getSpeedList();
+		if(typeof(this.settings.speedunitid)!=="undefined")
+		{
+		    var speedUnit=filter(speedList,{id:this.settings.speedunitid});	    
+		    if(typeof(speedUnit[0])!="undefined")
+		    {
+		    	return speedUnit[0];
+		    }
+		}    
+	    return filter(speedList,{id:0})[0];
+	};
+	
 	this.setSpeedUnitId= function(speedunitid)
 	{
-		localStorage.setItem("speedunitid",speedunitid);
+		this.settings.speedunitid=speedunitid;
 	};
 
 	this.getAppLanguageId= function()
 	{
+		
 		var appLanguageList = this.getAppLanguageList();
-	    var applanguageid = localStorage.getItem("applanguageid") ;
-	    
-	    if (applanguageid)
-	    {
-	        for(appLanguage in appLanguageList)    
-	        {
-	            if(applanguageid==appLanguageList[appLanguage]["id"])
-	            {
-	                return applanguageid;
-	            }
-	        }
-	    }
+		if(typeof(this.settings.applanguageid)!=="undefined")
+		{
+		    var appLanguage=filter(appLanguageList,{id:this.settings.applanguageid});	    
+		    if(typeof(appLanguage[0])!="undefined")
+		    {
+		    	return appLanguage[0].id;
+		    }			
+		}    
 	    return this.defaultAppLanguageId;
+	};
+	
+	this.getAppLanguage= function()
+	{
+		var appLanguageList = this.getAppLanguageList();
+		if(typeof(this.settings.applanguageid)!=="undefined")
+		{
+		    var appLanguage=filter(appLanguageList,{id:this.settings.applanguageid});	    
+		    if(typeof(appLanguage[0])!="undefined")
+		    {
+		    	return appLanguage[0];
+		    }
+		}
+	    return filter(appLanguageList,{id:0})[0];
 	};
 	this.setAppLanguageId= function(applanguageid)
 	{
-		localStorage.setItem("applanguageid",applanguageid);
+		this.settings.applanguageid=applanguageid;
 	};
+
 
 	this.getWeatherLanguageId= function()
 	{
 		var weatherLanguageList = this.getWeatherLanguageList();
-	    var weatherlanguageid = localStorage.getItem("weatherlanguageid") ;
-	    
-	    if (weatherlanguageid)
-	    {
-	        for(weatherLanguage in weatherLanguageList)    
-	        {
-	            if(weatherlanguageid==weatherLanguageList[weatherLanguage]["id"])
-	            {
-	                return weatherlanguageid;
-	            }
-	        }
-	    }
+		if(typeof(this.settings.weatherlanguageid)!=="undefined")
+		{
+		    var weatherLanguage=filter(weatherLanguageList,{id:this.settings.weatherlanguageid});	    
+		    if(typeof(weatherLanguage[0])!="undefined")
+		    {
+		    	return weatherLanguage[0].id;
+		    }
+		}
 	    return this.defaultWeatherLanguageId;
+	};
+	
+	this.getWeatherLanguage= function()
+	{
+		var weatherLanguageList = this.getWeatherLanguageList();
+		if(typeof(this.settings.weatherlanguageid)!=="undefined")
+		{
+		    var weatherLanguage=filter(weatherLanguageList,{id:this.settings.weatherlanguageid});	    
+		    if(typeof(weatherLanguage[0])!="undefined")
+		    {
+		    	return weatherLanguage[0];
+		    }	
+	    }    
+	    return filter(weatherLanguageList,{id:0})[0];
 	};
 	this.setWeatherLanguageId= function(weatherlanguageid)
 	{
-		localStorage.setItem("weatherlanguageid",weatherlanguageid);
+		this.settings.weatherlanguageid=weatherlanguageid;
 	};	
 	
 	this.isLanguageSet= function() {
-		if(localStorage.getItem("applanguageid") == null || localStorage.getItem("weatherlanguageid") == null)
+		if(typeof(this.settings.applanguageid) === "undefined" || typeof(this.settings.weatherlanguageid) === "undefined")
 		{
 			return false;
 		}
@@ -604,25 +708,101 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	
 	this.getCnt= function()
 	{
-		return localStorage.getItem("cnt") || this.defaultCnt;
+		return this.settings.cnt || this.defaultCnt;
 	};
 	this.setCnt= function(cnt)
 	{
-		localStorage.setItem("cnt",cnt);
+		this.settings.cnt=cnt;
 	};
-	
-	this.getLanguage= function()
-	{
-		return localStorage.getItem("language") || this.defaultLanguage;
-	};
-	this.setLanguage= function(language)
-	{
-		localStorage.setItem("language",language);
-	};
-	
+		
 	this.getApiId= function()
 	{
 		return this.apiId;
+	};
+		
+	
+	
+	
+	this.getPercUnit = function()
+	{				
+		var PercList = this.getPercList();
+	    var perc=filter(PercList,{id:0});	    
+	    if(typeof(perc[0])!="undefined")
+	    {
+	    	return perc[0];
+	    }	    
+	    return filter(PercList,{id:0})[0];
+	};	
+	this.getPrecipUnit = function()
+	{
+		var PrecipList = this.getPrecipList();
+	    var precip=filter(PrecipList,{id:0});	    
+	    if(typeof(precip[0])!="undefined")
+	    {
+	    	return precip[0];
+	    }	    
+	    return filter(PrecipList,{id:0})[0];
+	};	
+	
+	this.getPressureUnit = function()
+	{
+		var PressureList = this.getPressureList();
+	    var pressure=filter(PressureList,{id:0});	    
+	    if(typeof(pressure[0])!="undefined")
+	    {
+	    	return pressure[0];
+	    }	    
+	    return filter(PressureList,{id:0})[0];
+	};		
+	
+	this.getAllSettings = function()
+	{
+		var objParam = {};
+		objParam.city=this.getCity();
+		objParam.isacccurate=this.getIsAccurate();
+		objParam.isgeolocate=this.getIsGeolocate();
+		objParam.tempunitid=this.getTempUnitId();
+		objParam.speedunitid=this.getSpeedUnitId();
+		objParam.applanguageid=this.getAppLanguageId();
+		objParam.weatherlanguageid=this.getWeatherLanguageId();
+		objParam.cnt=this.getCnt();		
+		return objParam;
+	};
+
+	this.setSettingsFromObj = function(objParam)
+	{
+		if(typeof(objParam.city)!=undefined)
+		{
+			this.setCity(objParam.city);
+		}
+		if(typeof(objParam.isacccurate)!=undefined)
+		{
+			this.setIsAccurate(objParam.isacccurate);
+		}
+		if(typeof(objParam.isgeolocate)!=undefined)
+		{
+			this.setIsGeolocate(objParam.isgeolocate);
+		}
+		if(typeof(objParam.tempunitid)!=undefined)
+		{
+			this.setTempUnitId(objParam.tempunitid);
+		}
+		if(typeof(objParam.speedunitid)!=undefined)
+		{
+			this.setSpeedUnitId(objParam.speedunitid);
+		}
+		if(typeof(objParam.applanguageid)!=undefined)
+		{
+			this.setAppLanguageId(objParam.applanguageid);
+		}
+		if(typeof(objParam.applanguageid)!=undefined)
+		{
+			this.getWeatherLanguageId(objParam.applanguageid);
+		}
+		if(typeof(objParam.cnt)!=undefined)
+		{
+			this.getWeatherLanguageId(objParam.weatherlanguageid);
+		}	
 	};
 }]);
 
@@ -648,14 +828,14 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 		    
 			var temp_unit_id=SettingsSrvc.getTempUnitId();
 			var speed_unit_id=SettingsSrvc.getSpeedUnitId();
+
+			weatherObj.percUnitLab=gettextCatalog.getString(SettingsSrvc.getPercUnit().unit);
+			weatherObj.pressureUnitLab=gettextCatalog.getString(SettingsSrvc.getPressureUnit().unit);
+			weatherObj.precUnitLab=gettextCatalog.getString(SettingsSrvc.getPrecipUnit().unit);
+			weatherObj.tempUnitLab=gettextCatalog.getString(SettingsSrvc.getTempUnit().unit);
+			weatherObj.speedUnitLab=gettextCatalog.getString(SettingsSrvc.getSpeedUnit().unit);
 			
-			weatherObj.percUnitLab=gettextCatalog.getString(UtilsSrvc.getPercUnitLab());
-			weatherObj.pressureUnitLab=gettextCatalog.getString(UtilsSrvc.getPressureUnitLab());
-			weatherObj.precUnitLab=gettextCatalog.getString(UtilsSrvc.getPrecipUnitLab());
-			weatherObj.tempUnitLab=gettextCatalog.getString(UtilsSrvc.getTempUnitLab(temp_unit_id));
-			weatherObj.speedUnitLab=gettextCatalog.getString(UtilsSrvc.getSpeedUnitLab(speed_unit_id));
-			
-			if(type_weather==0)
+			if(type_weather===0)
 			{										
 				weatherObj.dt=HTTPresponse.dt*1000;
 				weatherObj.city=HTTPresponse.name;
@@ -724,7 +904,7 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 					weatherObj.wind_speed=UtilsSrvc.getSpeedData(temp_unit_id,speed_unit_id,HTTPresponse.wind.speed);	
 				}
 			}
-			if(type_weather==1)
+			if(type_weather===1)
 			{
 				if(typeof(HTTPresponse.city) !== "undefined")
 				{					
@@ -800,7 +980,7 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 					}
 				}				
 			}		
-			if(type_weather==2)
+			if(type_weather===2)
 			{
 				if(typeof(HTTPresponse.city) !== "undefined")
 				{					
@@ -816,48 +996,48 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 				if(typeof(HTTPresponse.list) !== "undefined")
 				{
 					weatherObj.list=new Array();			
-					for(var i in HTTPresponse.list)
+					for(var j in HTTPresponse.list)
 					{
-						weatherObj.list[i]=new Object();
-						weatherObj.list[i].dt=HTTPresponse.list[i].dt*1000;
-						weatherObj.list[i].description=HTTPresponse.list[i].description;						
+						weatherObj.list[j]=new Object();
+						weatherObj.list[j].dt=HTTPresponse.list[j].dt*1000;
+						weatherObj.list[j].description=HTTPresponse.list[j].description;						
 						
 						
 						
-						if(typeof(HTTPresponse.list[i].temp) !== "undefined")
+						if(typeof(HTTPresponse.list[j].temp) !== "undefined")
 						{
-							weatherObj.list[i].temp=HTTPresponse.list[i].temp.day;
-							weatherObj.list[i].temp_min=HTTPresponse.list[i].temp.min;
-							weatherObj.list[i].temp_max=HTTPresponse.list[i].temp.max;
+							weatherObj.list[j].temp=HTTPresponse.list[j].temp.day;
+							weatherObj.list[j].temp_min=HTTPresponse.list[j].temp.min;
+							weatherObj.list[j].temp_max=HTTPresponse.list[j].temp.max;
 						}
 						
-						if(typeof(HTTPresponse.list[i].sys) !== "undefined")
+						if(typeof(HTTPresponse.list[j].sys) !== "undefined")
 						{
-							weatherObj.list[i].pod="d";
+							weatherObj.list[j].pod="d";
 						}
 						
-						if(typeof(HTTPresponse.list[i].weather) !== "undefined")
+						if(typeof(HTTPresponse.list[j].weather) !== "undefined")
 						{
-							weatherObj.list[i].description=HTTPresponse.list[i].weather[0].description;
-							weatherObj.list[i].weather_id=HTTPresponse.list[i].weather[0].id;	
-							weatherObj.list[i].customInfo=UtilsSrvc.getCustomWeatherInfo(weatherObj.list[i].weather_id,weatherObj.list[i].pod);	
+							weatherObj.list[j].description=HTTPresponse.list[j].weather[0].description;
+							weatherObj.list[j].weather_id=HTTPresponse.list[j].weather[0].id;	
+							weatherObj.list[j].customInfo=UtilsSrvc.getCustomWeatherInfo(weatherObj.list[j].weather_id,weatherObj.list[j].pod);	
 							
-							if(typeof(weatherObj.list[i].customInfo.description) !== "undefined" )
+							if(typeof(weatherObj.list[j].customInfo.description) !== "undefined" )
 							{
-								weatherObj.list[i].description=weatherObj.list[i].customInfo.description;						
+								weatherObj.list[j].description=weatherObj.list[j].customInfo.description;						
 							}
 							
 						}
-						weatherObj.list[i].clouds=HTTPresponse.list[i].clouds;				
-						weatherObj.list[i].pressure=HTTPresponse.list[i].pressure;
-						weatherObj.list[i].humidity=HTTPresponse.list[i].humidity;		
-						weatherObj.list[i].rain=HTTPresponse.list[i].rain;
-						weatherObj.list[i].snow=HTTPresponse.list[i].snow;
-						weatherObj.list[i].wind_deg=HTTPresponse.list[i].deg;
-						weatherObj.list[i].wind_orient=UtilsSrvc.getOrientationFromDegree(weatherObj.list[i].wind_deg);
+						weatherObj.list[j].clouds=HTTPresponse.list[j].clouds;				
+						weatherObj.list[j].pressure=HTTPresponse.list[j].pressure;
+						weatherObj.list[j].humidity=HTTPresponse.list[j].humidity;		
+						weatherObj.list[j].rain=HTTPresponse.list[j].rain;
+						weatherObj.list[j].snow=HTTPresponse.list[j].snow;
+						weatherObj.list[j].wind_deg=HTTPresponse.list[j].deg;
+						weatherObj.list[j].wind_orient=UtilsSrvc.getOrientationFromDegree(weatherObj.list[j].wind_deg);
 						
-						weatherObj.list[i].wind_gust=UtilsSrvc.getSpeedData(speed_unit_id,HTTPresponse.list[i].gust);
-						weatherObj.list[i].wind_speed=UtilsSrvc.getSpeedData(speed_unit_id,HTTPresponse.list[i].wind_speed);						
+						weatherObj.list[j].wind_gust=UtilsSrvc.getSpeedData(speed_unit_id,HTTPresponse.list[j].gust);
+						weatherObj.list[j].wind_speed=UtilsSrvc.getSpeedData(speed_unit_id,HTTPresponse.list[j].wind_speed);						
 					}
 				}				
 			}		
@@ -869,74 +1049,18 @@ yaoswa.service('WeatherFact', ['gettextCatalog','UtilsSrvc','SettingsSrvc', func
 	return WeatherFact;
 }]);	
 
-
-yaoswa.factory('CordovaFact', ['$window','$q','$http', function($window,$q,$http) {	
-	
-	return {
-		getGeolocation : function() {
-			var options = {
-			  timeout: 60000,
-			  maximumAge: 100000
-			};
-			var geolocation = $window.navigator.geolocation;
-			var deferred = $q.defer();		
-			if(typeof(geolocation)!='undefined')
-			{
-				geolocation.getCurrentPosition(
-					function(position)
-					{
-						deferred.resolve(position);
-					},
-					function(error)
-					{
-						deferred.reject(null);				
-					},
-					options		
-				);
-			}
-			else
-			{
-				deferred.reject(null);	
-			}
-			return deferred.promise;
-		},
-		getGlobalization : function() {			
-			var globalization = $window.navigator.globalization;
-			var deferred = $q.defer();
-			if(typeof(globalization)!='undefined')
-			{
-				globalization.getLocaleName(
-					function(language)
-					{
-						deferred.resolve(language);
-					},
-					function()
-					{
-						deferred.reject(null);				
-					}		
-				);
-			}
-			else
-			{
-				deferred.reject(null);	
-			}
-			return deferred.promise;
-		}
-	};	
-}]);
-
-yaoswa.service('WeatherSrvc', ['SettingsSrvc','CordovaFact','$http','$q', function(SettingsSrvc,CordovaFact,$http,$q) {	
+yaoswa.service('WeatherSrvc', ['SettingsSrvc','$cordovaGeolocation','$http','$q', function(SettingsSrvc,$cordovaGeolocation,$http,$q) {	
 	this.getWeatherParam = function() {
 		var param = new Object();
 		param.location = SettingsSrvc.getCity();
 		param.accurate = SettingsSrvc.getIsAccurate();
 		param.geolocate = SettingsSrvc.getIsGeolocate();
-		param.tempUnit = SettingsSrvc.getTempList()[SettingsSrvc.getTempUnitId()].owm;
+		param.tempUnit = SettingsSrvc.getTempUnit().owm;
 		param.cnt = SettingsSrvc.getCnt();
 		param.apiId = SettingsSrvc.getApiId();		
-		param.lang = SettingsSrvc.getWeatherLanguageList()[SettingsSrvc.getWeatherLanguageId()].label;
-		
-		if(param.accurate==true)
+		param.lang = SettingsSrvc.getWeatherLanguage().label;
+		param.cordovaOpt = {timeout: 60000,maximumAge: 100000};
+		if(param.accurate===true)
 		{
 			param.type="accurate";
 		}
@@ -959,10 +1083,9 @@ yaoswa.service('WeatherSrvc', ['SettingsSrvc','CordovaFact','$http','$q', functi
 		current_weather_end_url+="&APPID="+param.apiId;	
 				
 	 	var request_return;
-	 	
 	 	if(param.geolocate)
 	 	{
-			request_return = CordovaFact.getGeolocation().then(
+			request_return = $cordovaGeolocation.getCurrentPosition(param.cordovaOpt).then(
 	 			function(position)
 	 			{
 	 				current_weather_url_geo=current_weather_url_geo.replace('%lat%',position.coords.latitude).replace('%lon%',position.coords.longitude);
@@ -999,7 +1122,7 @@ yaoswa.service('WeatherSrvc', ['SettingsSrvc','CordovaFact','$http','$q', functi
 	 	
 	 	if(param.geolocate)
 	 	{
-			request_return = CordovaFact.getGeolocation().then(
+			request_return = $cordovaGeolocation.getCurrentPosition(param.cordovaOpt).then(
 	 			function(position)
 	 			{
 	 				hourly_weather_url_geo=hourly_weather_url_geo.replace('%lat%',position.coords.latitude).replace('%lon%',position.coords.longitude);
@@ -1038,7 +1161,7 @@ yaoswa.service('WeatherSrvc', ['SettingsSrvc','CordovaFact','$http','$q', functi
 	 	
 	 	if(param.geolocate)
 	 	{
-			request_return = CordovaFact.getGeolocation().then(
+			request_return = $cordovaGeolocation.getCurrentPosition(param.cordovaOpt).then(
 	 			function(position)
 	 			{
 	 				daily_weather_url_geo=daily_weather_url_geo.replace('%lat%',position.coords.latitude).replace('%lon%',position.coords.longitude);
@@ -1083,29 +1206,6 @@ yaoswa.service('UtilsSrvc', [ 'gettextCatalog','SettingsSrvc', function(gettextC
 		return Math.round(mm*mmtoin);
 	};
 	
-	this.getPercUnitLab = function()
-	{		
-        return SettingsSrvc.getPercList()[0].unit;
-	};	
-	this.getPrecipUnitLab = function()
-	{
-        return SettingsSrvc.getPrecipList()[0].unit;
-	};	
-	
-	this.getPressureUnitLab = function()
-	{
-        return SettingsSrvc.getPressureList()[0].unit;
-	};	
-	
-	this.getSpeedUnitLab = function(speed_unit_id)
-	{
-        return SettingsSrvc.getSpeedList()[speed_unit_id].unit;
-	};	
-	this.getTempUnitLab = function(temp_unit_id)
-	{
-        return SettingsSrvc.getTempList()[temp_unit_id].unit;
-	};	
-	
 	this.getSpeedData = function(temp_unit_id,speed_unit_id,speed_data)
 	{
 		temp_unit_id = temp_unit_id || 0 ;
@@ -1113,19 +1213,19 @@ yaoswa.service('UtilsSrvc', [ 'gettextCatalog','SettingsSrvc', function(gettextC
 		speed_data = speed_data || 0 ;		
 		var speed=0;
 		
-		if(temp_unit_id == 0 || temp_unit_id == 2)
+		if(temp_unit_id === 0 || temp_unit_id === 2)
 		{
 			speed_data=this.convertmphtoms(speed_data);
 		}
-        if(speed_unit_id==0)
+        if(speed_unit_id===0)
 		{
         	speed=speed_data;
 		}
-        else if (speed_unit_id==1)
+        else if (speed_unit_id===1)
         {
         	speed=this.mpsToKph(speed_data);
 		}
-        else if (speed_unit_id==2)
+        else if (speed_unit_id===2)
         {
         	speed=this.mpsToMilesph(speed_data);
         } 
@@ -1142,11 +1242,11 @@ yaoswa.service('UtilsSrvc', [ 'gettextCatalog','SettingsSrvc', function(gettextC
 	{
 		precip_unit_id=precip_unit_id||0;
 		var precip=0;
-        if(precip_unit_id==0)
+        if(precip_unit_id===0)
 		{
         	precip=precip_data;
 		}
-        else if (precip_unit_id==1)
+        else if (precip_unit_id===1)
         {
         	precip=this.mmToIn(precip_data);
 		}
@@ -1266,7 +1366,7 @@ yaoswa.service('UtilsSrvc', [ 'gettextCatalog','SettingsSrvc', function(gettextC
 		var day_status = "day";
 		var isNight = false;
 		
-		var langWeather=SettingsSrvc.getWeatherLanguageList()[SettingsSrvc.getWeatherLanguageId()].label;
+		var langWeather=SettingsSrvc.getWeatherLanguage().label;
 		
 		if(pod=="n")
 		{
@@ -1658,7 +1758,12 @@ yaoswa.controller('HeaderCtrl',['$scope','HeaderSrvc','$timeout', function ($sco
 
 yaoswa.controller('HomeCtrl',['$scope','gettextCatalog','WeatherSrvc','HeaderSrvc','WeatherFact',
 function ($scope,gettextCatalog,WeatherSrvc,HeaderSrvc,WeatherFact) {
-	var weather_title=new Array(gettextCatalog.getString("Now"), gettextCatalog.getString("Next Hours"), gettextCatalog.getString("Next Days"));
+	var weather_title=new Array(
+		gettextCatalog.getString("Now"),
+		gettextCatalog.getString("Next Hours"),
+		gettextCatalog.getString("Next Days")
+	);
+	
 	$scope.loaderOverlay=false;
 	HeaderSrvc.setShowBackButton(false);
 	
@@ -1729,7 +1834,7 @@ function ($scope,gettextCatalog,WeatherSrvc,HeaderSrvc,WeatherFact) {
 	};
 	
 	$scope.isReadyTab = function(index) {
-		if($scope.activeTab==index && $scope.loaderOverlay==false)
+		if($scope.activeTab==index && $scope.loaderOverlay===false)
 		{
 			return true;
 		}		
@@ -1770,12 +1875,12 @@ function ($scope,gettextCatalog,WeatherSrvc,HeaderSrvc,WeatherFact) {
 		{
 			if(weather_test.cod == 404)
 			{
-					$scope.errorOverlaymsg=gettextCatalog.getString("Ville introuvable.");
+					$scope.errorOverlaymsg=gettextCatalog.getString("City not Found.");
 					return true;			
 			}
 			else if(weather_test.cod == 500)
 			{
-					$scope.errorOverlaymsg=gettextCatalog.getString("Erreur lors de la récupération des données<br/>Vérifier votre connexion internet.");
+					$scope.errorOverlaymsg=gettextCatalog.getString("Unable to get data.<br/>Check your network connection.");
 					return true;			
 			}
 		}
@@ -1883,7 +1988,7 @@ yaoswa.controller('AboutCtrl',['HeaderSrvc','$scope', function (HeaderSrvc,$scop
 	HeaderSrvc.setShowBackButton(true);
 }]);
 
-yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location','amMoment','gettextCatalog', function (HeaderSrvc,SettingsSrvc,$scope,$location,amMoment,gettextCatalog) {
+yaoswa.controller('SettingCtrl',['$scope','$location','$cordovaFile','HeaderSrvc','SettingsSrvc','amMoment','gettextCatalog', function ($scope,$location,$cordovaFile,HeaderSrvc,SettingsSrvc,amMoment,gettextCatalog) {
 	HeaderSrvc.setShowBackButton(true);
 			
     $scope.city=SettingsSrvc.getCity();
@@ -1895,28 +2000,28 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 	$scope.speedList=SettingsSrvc.getSpeedList();
 	$scope.appLanguageList=SettingsSrvc.getAppLanguageList();
 	$scope.weatherLanguageList=SettingsSrvc.getWeatherLanguageList();
-	$scope.tempUnitId=SettingsSrvc.getTempList()[SettingsSrvc.getTempUnitId()];
-	$scope.speedUnitId=SettingsSrvc.getSpeedList()[SettingsSrvc.getSpeedUnitId()];
-	$scope.appLanguageId=SettingsSrvc.getAppLanguageList()[SettingsSrvc.getAppLanguageId()];
-	$scope.weatherLanguageId=SettingsSrvc.getWeatherLanguageList()[SettingsSrvc.getWeatherLanguageId()];
+	$scope.tempUnit=SettingsSrvc.getTempUnit();
+	$scope.speedUnit=SettingsSrvc.getSpeedUnit();
+	$scope.appLanguage=SettingsSrvc.getAppLanguage();
+	$scope.weatherLanguage=SettingsSrvc.getWeatherLanguage();
 	
 	
 	$scope.getDynamicDesc = function(key)
 	{	
 		if(key == "city")
 		{
-			if($scope.city==null || $scope.city=='')
+			if($scope.city===null || String($scope.city).trim()==='')
 			{
 				return gettextCatalog.getString("No city set.");
 			}
 			else
 			{
-				return gettextCatalog.getString("Current city set : {{CITY}}.", { CITY: $scope.city });
+				return gettextCatalog.getString("Current city set : {{CITY}}.", { CITY: String($scope.city).trim() });
 			}
 		}		
 		if(key == "accurate")
 		{
-			if($scope.accurate == false)
+			if($scope.accurate === false)
 			{
 				return gettextCatalog.getString("Will search the closest city.");
 			}
@@ -1927,7 +2032,7 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 		}
 		if(key == "geolocate")
 		{
-			if($scope.geolocate==false)
+			if($scope.geolocate===false)
 			{
 				return gettextCatalog.getString("Will use the registered city.");
 			}
@@ -1938,30 +2043,30 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 		}
 		if(key == "tempunit")
 		{
-			return gettextCatalog.getString("Selected temp unit : {{UNIT}}.",{UNIT : $scope.tempUnitId.unit});
+			return gettextCatalog.getString("Selected temp unit : {{UNIT}}.",{UNIT : $scope.tempUnit.unit});
 		}
 		if(key == "speedunit")
 		{
-			return gettextCatalog.getString("Selected speed unit : {{UNIT}}.",{UNIT : $scope.speedUnitId.unit});
+			return gettextCatalog.getString("Selected speed unit : {{UNIT}}.",{UNIT : $scope.speedUnit.unit});
 		}
 		if(key == "applanguage")
 		{
-			return gettextCatalog.getString("Language for the application.<br/>Currently selected : {{LABEL_SETTING}}.",{LABEL_SETTING : $scope.appLanguageId.label_setting});
+			return gettextCatalog.getString("Language for the application.<br/>Currently selected : {{LABEL_SETTING}}.",{LABEL_SETTING : $scope.appLanguage.label_setting});
 		}
 		if(key == "weatherlanguage")
 		{
-			return gettextCatalog.getString("Language weather from the provider OpenWeatherMap.<br/>Currently selected : {{LABEL_SETTING}}.",{LABEL_SETTING : $scope.weatherLanguageId.label_setting});			
+			return gettextCatalog.getString("Language weather from the provider OpenWeatherMap.<br/>Currently selected : {{LABEL_SETTING}}.",{LABEL_SETTING : $scope.weatherLanguage.label_setting});			
 		}
 		
 		if(key == "cnt")
 		{
-			if($scope.city==null)
+			if($scope.nbCnt===null || String($scope.nbCnt).trim()==='')
 			{
 				return gettextCatalog.getString("Will use default max number of results.");		
 			}
 			else
 			{
-				return gettextCatalog.getString("Max number of results if available : {{NUMBER}}.",{ NUMBER : $scope.nbCnt });		
+				return gettextCatalog.getString("Max number of results if available : {{NUMBER}}.",{ NUMBER : String($scope.nbCnt).trim() });		
 			}
 		}
 		return null;
@@ -1984,17 +2089,25 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 	
 	$scope.saveSetting = function()
 	{
-		SettingsSrvc.setCity($scope.city);
+		SettingsSrvc.setCity(String($scope.city).trim());
 		SettingsSrvc.setIsAccurate($scope.accurate);
 		SettingsSrvc.setIsGeolocate($scope.geolocate);
-		SettingsSrvc.setTempUnitId($scope.tempUnitId.id);
-		SettingsSrvc.setSpeedUnitId($scope.speedUnitId.id);
-		SettingsSrvc.setAppLanguageId($scope.appLanguageId.id);
-		SettingsSrvc.setWeatherLanguageId($scope.weatherLanguageId.id);
-		SettingsSrvc.setCnt($scope.nbCnt);
+		SettingsSrvc.setTempUnitId($scope.tempUnit.id);
+		SettingsSrvc.setSpeedUnitId($scope.speedUnit.id);
+		SettingsSrvc.setAppLanguageId($scope.appLanguage.id);
+		SettingsSrvc.setWeatherLanguageId($scope.weatherLanguage.id);
+		SettingsSrvc.setCnt(String($scope.nbCnt).trim());		
 		
-		amMoment.changeLocale($scope.appLanguageList[SettingsSrvc.getAppLanguageId()]["label"]);
-    	gettextCatalog.setCurrentLanguage($scope.appLanguageList[SettingsSrvc.getAppLanguageId()]["label"]);
+		$cordovaFile.writeFile("cdvfile://localhost/persistent/", "localstorageWrapper.txt", JSON.stringify(SettingsSrvc.getAllSettings()), true).then(
+			function (success) {
+				console.log("Success but I don't care");
+			}, function (error) {
+				console.log("Error but I don't care");
+			}
+		);
+      
+		amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
+    	gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
 		$location.path('#home');
 	};
 	
@@ -2005,13 +2118,42 @@ yaoswa.controller('SettingCtrl',['HeaderSrvc','SettingsSrvc','$scope','$location
 window.deviceReady = false;
 document.addEventListener('deviceready',_ready,false);
 //uncomment only for browser test
-/*window.onload=_ready();*/
+//window.onload=_ready();
 function _ready() {	
 	if(!window.deviceReady)
 	{
-		//comment only for browser test
-		window.open = cordova.InAppBrowser.open;
-		angular.bootstrap(document, ['yaoswa']);	
+		/* Not necessary
+		if(typeof(cordova)!=='undefined')
+		{
+			window.open = cordova.InAppBrowser.open;			
+		}
+		*/
+		
+		//TODO
+		// No seriously can do better ?
+		if(window.resolveLocalFileSystemURL)
+		{
+			window.resolveLocalFileSystemURL("cdvfile://localhost/persistent/localstorageWrapper.txt", gotFile, fail);
+			function fail(e) {
+				window.yaoswaconfig={};
+				angular.bootstrap(document, ['yaoswa']);	
+			}		
+			function gotFile(fileEntry) {		
+				fileEntry.file(function(file) {
+					var reader = new FileReader();		
+					reader.onloadend = function(e) {
+						window.yaoswaconfig=this.result;
+						angular.bootstrap(document, ['yaoswa']);	
+					};		
+					reader.readAsText(file);
+				});		
+			}
+		}
+		else
+		{
+			window.yaoswaconfig={};
+			angular.bootstrap(document, ['yaoswa']);
+		}
 	}
 	window.deviceReady = true;
 }
