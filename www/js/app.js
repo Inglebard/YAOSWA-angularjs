@@ -771,37 +771,37 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 
 	this.setSettingsFromObj = function(objParam)
 	{
-		if(typeof(objParam.city)!=undefined)
+		if(typeof(objParam.city)!=="undefined")
 		{
 			this.setCity(objParam.city);
 		}
-		if(typeof(objParam.isacccurate)!=undefined)
+		if(typeof(objParam.isacccurate)!=="undefined")
 		{
 			this.setIsAccurate(objParam.isacccurate);
 		}
-		if(typeof(objParam.isgeolocate)!=undefined)
+		if(typeof(objParam.isgeolocate)!=="undefined")
 		{
 			this.setIsGeolocate(objParam.isgeolocate);
 		}
-		if(typeof(objParam.tempunitid)!=undefined)
+		if(typeof(objParam.tempunitid)!=="undefined")
 		{
 			this.setTempUnitId(objParam.tempunitid);
 		}
-		if(typeof(objParam.speedunitid)!=undefined)
+		if(typeof(objParam.speedunitid)!=="undefined")
 		{
 			this.setSpeedUnitId(objParam.speedunitid);
 		}
-		if(typeof(objParam.applanguageid)!=undefined)
+		if(typeof(objParam.applanguageid)!=="undefined")
 		{
 			this.setAppLanguageId(objParam.applanguageid);
 		}
-		if(typeof(objParam.applanguageid)!=undefined)
+		if(typeof(objParam.applanguageid)!=="undefined")
 		{
-			this.getWeatherLanguageId(objParam.applanguageid);
+			this.setWeatherLanguageId(objParam.applanguageid);
 		}
-		if(typeof(objParam.cnt)!=undefined)
+		if(typeof(objParam.cnt)!=="undefined")
 		{
-			this.getWeatherLanguageId(objParam.weatherlanguageid);
+			this.setWeatherLanguageId(objParam.weatherlanguageid);
 		}	
 	};
 }]);
