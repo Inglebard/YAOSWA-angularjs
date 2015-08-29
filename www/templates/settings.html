@@ -36,8 +36,14 @@
 							</div>
 						</div>
 						<div class="input_control_checkbox_data col-xs-2">
-							<div class="input_control_checkbox_input_wrapper pull-right">
-								<input type="checkbox" ng-model="accurate"/>
+							<div class="input_control_checkbox_input_wrapper pull-right">								
+								<label>
+									<input name="accurate" type="checkbox" data-type="switch" ng-model="accurate">
+									<span class="toggle">
+										<span class="toggle-handle"></span>
+										<span class="toggle-bg"></span>
+									</span>
+								</label>
 							</div>
 						</div>
 					</div>
@@ -52,9 +58,15 @@
 								<span>{{getDynamicDesc('geolocate')}}</span>				
 							</div>
 						</div>
-						<div class="input_control_checkbox_data col-xs-2">
+						<div class="input_control_checkbox_data col-xs-2">							
 							<div class="input_control_checkbox_input_wrapper pull-right">
-								<input type="checkbox" ng-model="geolocate"/>
+								<label>
+									<input name="geolocate" type="checkbox" data-type="switch" ng-model="geolocate">
+									<span class="toggle">
+										<span class="toggle-handle"></span>
+										<span class="toggle-bg"></span>
+									</span>
+								</label>
 							</div>
 						</div>
 					</div>
