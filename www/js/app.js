@@ -16,7 +16,18 @@ var yaoswa = angular.module('yaoswa',['ngRoute','ngSanitize','ngCordova','afkl.l
 
 yaoswa.config(function($routeProvider) {
 	$routeProvider
-		.when('/yaoswa',{title: 'YAOSWA',templateUrl :'templates/home.html',controller: 'HomeCtrl'})
+		.when('/yaoswa',
+			{
+				title: 'YAOSWA',
+				templateUrl :'templates/home.html',
+				controller: 'HomeCtrl',				
+				resolve: {
+					loaded: function(InitSrvc) {
+						return InitSrvc.init();
+					}
+				}
+			}
+		)
 		.when('/about',{title: 'About',templateUrl :'templates/about.html', controller: 'AboutCtrl'})
 		.when('/settings',{title: 'Settings',templateUrl :'templates/settings.html', controller: 'SettingCtrl'})
 		.otherwise('/yaoswa',{title: 'YAOSWA',redirectTo :'/yaoswa'});
@@ -123,9 +134,9 @@ yaoswa.run(['$location','$rootScope','gettextCatalog','HeaderSrvc', function($lo
     });
 }]);
 
-yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMoment','gettextCatalog','SettingsSrvc', function($window,$rootScope,$cordovaGlobalization,$cordovaFile,amMoment,gettextCatalog,SettingsSrvc) {
+yaoswa.service('InitSrvc',['$window','$rootScope','$q','$cordovaGlobalization','$cordovaFile','amMoment','gettextCatalog','SettingsSrvc', function($window,$rootScope,$q,$cordovaGlobalization,$cordovaFile,amMoment,gettextCatalog,SettingsSrvc) {
 	
-	this.init = function ()
+	function detectandshow(deffered)
 	{
 		var appLanguageList=SettingsSrvc.getAppLanguageList();
 		var weatherLanguageList=SettingsSrvc.getWeatherLanguageList();
@@ -196,6 +207,7 @@ yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMom
 					SettingsSrvc.setWeatherLanguageId(weather_language_detect);
 					amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
 				    gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
+	        		deferred.resolve();
 	
 				},
 				function(){							
@@ -203,6 +215,7 @@ yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMom
 					SettingsSrvc.setWeatherLanguageId(0);				
 					amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
 				    gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
+	        		deferred.reject();
 				}
 			);
 		}
@@ -210,21 +223,42 @@ yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMom
 		{
 			amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
 	    	gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);		
+	        deferred.resolve();
 		}	
 		$rootScope.startLoadingOverlay="none";
-	};
+	}
 	
-	var objParam={};
-	try
-	{
-		objParam=JSON.parse(window.yaoswaconfig);
-	}
-	catch(e)
-	{
-		console.log("Not parsable");
-	}
-	SettingsSrvc.setSettingsFromObj(objParam);
-	this.init();
+	var deferred = $q.defer();
+	this.alreadydone=false;
+	this.init = function ()
+	{	
+		if(!this.alreadydone)
+		{
+			this.alreadydone=true;
+			$cordovaFile.readAsText("cdvfile://localhost/persistent/", "localstorageWrapper.txt").then(
+		        function (success) {
+		        	var objParam={};
+					try
+					{
+						objParam=JSON.parse(success);
+					}
+					catch(e)
+					{
+						console.log("Not parsable");
+					}
+					SettingsSrvc.setSettingsFromObj(objParam);
+		            detectandshow(deferred);
+		        }, function (error) {
+		            detectandshow(deferred);
+		        }
+		    );
+		}
+		else
+		{
+			deferred.resolve();
+		}
+	    return deferred.promise;
+	 };
 	
 }]);
 
@@ -2122,38 +2156,11 @@ document.addEventListener('deviceready',_ready,false);
 function _ready() {	
 	if(!window.deviceReady)
 	{
-		/* Not necessary
 		if(typeof(cordova)!=='undefined')
 		{
 			window.open = cordova.InAppBrowser.open;			
-		}
-		*/
-		
-		//TODO
-		// No seriously can do better ?
-		if(window.resolveLocalFileSystemURL)
-		{
-			window.resolveLocalFileSystemURL("cdvfile://localhost/persistent/localstorageWrapper.txt", gotFile, fail);
-			function fail(e) {
-				window.yaoswaconfig={};
-				angular.bootstrap(document, ['yaoswa']);	
-			}		
-			function gotFile(fileEntry) {		
-				fileEntry.file(function(file) {
-					var reader = new FileReader();		
-					reader.onloadend = function(e) {
-						window.yaoswaconfig=this.result;
-						angular.bootstrap(document, ['yaoswa']);	
-					};		
-					reader.readAsText(file);
-				});		
-			}
-		}
-		else
-		{
-			window.yaoswaconfig={};
-			angular.bootstrap(document, ['yaoswa']);
-		}
+		}		
+		angular.bootstrap(document, ['yaoswa']);
 	}
 	window.deviceReady = true;
 }
