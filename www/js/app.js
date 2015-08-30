@@ -29,7 +29,19 @@ yaoswa.config(function($routeProvider) {
 			}
 		)
 		.when('/about',{title: 'About',templateUrl :'templates/about.html', controller: 'AboutCtrl'})
-		.when('/settings',{title: 'Settings',templateUrl :'templates/settings.html', controller: 'SettingCtrl'})
+		.when('/settings',
+			{
+				title: 'Settings',
+				templateUrl :'templates/settings.html',
+				controller: 'SettingCtrl',		
+				resolve: {
+					//Even if it will never happen, just in case
+					loaded: function(InitSrvc) {
+						return InitSrvc.init();
+					}
+				}
+			}
+		)
 		.otherwise('/yaoswa',{title: 'YAOSWA',redirectTo :'/yaoswa'});
 });
 
