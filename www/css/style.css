@@ -125,6 +125,27 @@ footer {
 }
 */
 
+input[type="text"] {
+    outline: none;
+}
+
+input[type="text"] {
+    padding: 4px 0px 1px 4px;
+    border-radius: 6px;
+    outline: none;
+    border: solid 1px #DDDDDD;
+    box-shadow: inset 1px 1px 1px 0px #AAAAAA;
+}
+
+.ubuntulink {
+    color: #dd4814;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.ubuntulink:hover {
+    color: #d16742;
+}
 
 .about_logo_wrapper {
 	text-align: center;
@@ -651,8 +672,6 @@ input[type="button"]
 	background: #FF4200;
 	border: 2px solid #dd4814;
 }
-
-
 
 
 

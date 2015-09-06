@@ -5,17 +5,17 @@
 				<img src="img/application_icon/ic_launcher.svg">
 			</div>
 			<div class="about_text_wrapper">
-				<span class="about_title mediumfont">YAOSWA v1.2.1</span>
+				<span class="about_title mediumfont">YAOSWA v1.2.2</span>
 				<span class="about_subtitle">Yet Another Open Source Weather Application</span>
 				<p class="about_desc">
 					<span translate>YAOSWA is a weather application created for ubuntu phone.</span>
 					<br/>
 					<br/>
-					<span translate>This app is powered by</span> <span class="mediumfont">Cordova</span>, <span class="mediumfont">OpenWeatherMap</span> <span translate>and</span> <span class="mediumfont">AngularJS</span>.
+					<span translate>This app is powered by</span> <span class="mediumfont ubuntulink" ng-click="goto('cordova')">Cordova</span>, <span class="mediumfont ubuntulink" ng-click="goto('owm')">OpenWeatherMap</span> <span translate>and</span> <span class="mediumfont ubuntulink" ng-click="goto('angular')">AngularJS</span>.
 				</p>
 				<ul>
-					<li><span translate>Website and support:</span> YAOSWA</a></li>
-					<li><span translate>License:</span> GPL2</li>
+					<li><span translate>Website and support:</span> <span ng-click="goto('yaoswa')" class="ubuntulink">YAOSWA</span></li>
+					<li><span translate>License:</span> <span ng-click="goto('gpl2')" class="ubuntulink">GPL2</span></li>
 				</ul>
 			</div>
 		</div>

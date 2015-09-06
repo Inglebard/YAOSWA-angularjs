@@ -16,9 +16,44 @@ var yaoswa = angular.module('yaoswa',['ngRoute','ngSanitize','ngCordova','afkl.l
 
 yaoswa.config(function($routeProvider) {
 	$routeProvider
-		.when('/yaoswa',{title: 'YAOSWA',templateUrl :'templates/home.html',controller: 'HomeCtrl'})
-		.when('/about',{title: 'About',templateUrl :'templates/about.html', controller: 'AboutCtrl'})
-		.when('/settings',{title: 'Settings',templateUrl :'templates/settings.html', controller: 'SettingCtrl'})
+		.when('/yaoswa',
+			{
+				title: 'YAOSWA',
+				templateUrl :'templates/home.html',
+				controller: 'HomeCtrl',				
+				/*resolve: {
+					loaded: function(InitSrvc) {
+						return InitSrvc.init();
+					}
+				}*/
+			}
+		)
+		.when('/about',
+			{
+				title: 'About',
+				templateUrl :'templates/about.html',
+				controller: 'AboutCtrl',		
+				/*resolve: {
+					//Even if it will never happen, just in case
+					loaded: function(InitSrvc) {
+						return InitSrvc.init();
+					}
+				}*/
+			}
+		)
+		.when('/settings',
+			{
+				title: 'Settings',
+				templateUrl :'templates/settings.html',
+				controller: 'SettingCtrl',		
+				/*resolve: {
+					//Even if it will never happen, just in case
+					loaded: function(InitSrvc) {
+						return InitSrvc.init();
+					}
+				}*/
+			}
+		)
 		.otherwise('/yaoswa',{title: 'YAOSWA',redirectTo :'/yaoswa'});
 });
 
@@ -196,6 +231,7 @@ yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMom
 					SettingsSrvc.setWeatherLanguageId(weather_language_detect);
 					amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
 				    gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
+					$rootScope.startLoadingOverlay="none";
 	
 				},
 				function(){							
@@ -203,6 +239,7 @@ yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMom
 					SettingsSrvc.setWeatherLanguageId(0);				
 					amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
 				    gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
+					$rootScope.startLoadingOverlay="none";
 				}
 			);
 		}
@@ -210,8 +247,8 @@ yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMom
 		{
 			amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
 	    	gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);		
+			$rootScope.startLoadingOverlay="none";
 		}	
-		$rootScope.startLoadingOverlay="none";
 	};
 	
 	var objParam={};
@@ -228,6 +265,139 @@ yaoswa.run(['$window','$rootScope','$cordovaGlobalization','$cordovaFile','amMom
 	
 }]);
 
+
+/*
+yaoswa.service('InitSrvc',['$window','$rootScope','$q','$cordovaGlobalization','$cordovaFile','amMoment','gettextCatalog','SettingsSrvc', function($window,$rootScope,$q,$cordovaGlobalization,$cordovaFile,amMoment,gettextCatalog,SettingsSrvc) {
+	
+	function detectandshow(deferred)
+	{
+		var appLanguageList=SettingsSrvc.getAppLanguageList();
+		var weatherLanguageList=SettingsSrvc.getWeatherLanguageList();
+		if(!SettingsSrvc.isLanguageSet())
+		{
+			$cordovaGlobalization.getLocaleName().then(
+				function(locale){
+					var alternate_locale;
+					var can_alternate=false;
+					
+					var localeVal = locale["value"];
+					if(localeVal.indexOf("_") > -1)
+					{
+						can_alternate=true;
+						alternate_locale=localeVal.split("_")[0];
+					}
+					
+					var app_language_detect;
+					var app_alternate_language_detect;
+					
+					var weather_language_detect;
+					var weather_alternate_language_detect;
+					
+					var default_language_id;
+					
+					for(appLanguage in appLanguageList)	
+					{
+						if(localeVal==appLanguageList[appLanguage]["label"])
+						{
+							app_language_detect=appLanguageList[appLanguage]["id"];
+						}
+						if(can_alternate)
+						{
+							if(alternate_locale==appLanguageList[appLanguage]["label"])
+							{
+								app_alternate_language_detect=appLanguageList[appLanguage]["id"];				
+							}
+						}
+					}
+					
+					for(weatherLanguage in weatherLanguageList)	
+					{
+						if(localeVal==weatherLanguageList[weatherLanguage]["label"])
+						{
+							weather_language_detect=weatherLanguageList[weatherLanguage]["id"];
+						}
+						if(can_alternate)
+						{
+							if(alternate_locale==weatherLanguageList[weatherLanguage]["label"])
+							{
+								weather_alternate_language_detect=weatherLanguageList[weatherLanguage]["id"];				
+							}
+						}
+					}	
+					weather_language_detect= weather_language_detect || weather_alternate_language_detect;
+					app_language_detect= app_language_detect || app_alternate_language_detect;
+					
+					if(!weather_language_detect)
+					{
+						weather_language_detect=default_language_id;
+					}
+					if(!app_language_detect)
+					{
+						app_language_detect=default_language_id;
+					}
+					
+					SettingsSrvc.setAppLanguageId(app_language_detect);
+					SettingsSrvc.setWeatherLanguageId(weather_language_detect);
+					amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
+				    gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
+	        		deferred.resolve("Globalization OK.");	        		
+					$rootScope.startLoadingOverlay="none";
+	
+				},
+				function(){						
+					SettingsSrvc.setAppLanguageId(0);
+					SettingsSrvc.setWeatherLanguageId(0);				
+					amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
+				    gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);
+	        		deferred.reject("Globalization not working.");
+					console.log(deferred);	
+					$rootScope.startLoadingOverlay="none";
+				}
+			);
+		}
+		else
+		{
+			amMoment.changeLocale(SettingsSrvc.getAppLanguage().label);
+	    	gettextCatalog.setCurrentLanguage(SettingsSrvc.getAppLanguage().label);		
+	        deferred.resolve("Init OK");
+			$rootScope.startLoadingOverlay="none";
+		}	
+	}
+	
+	this.alreadydone=false;
+	this.init = function ()
+	{	
+		var deferred = $q.defer();
+		if(!this.alreadydone)
+		{
+			this.alreadydone=true;
+			$cordovaFile.readAsText("cdvfile://localhost/persistent/", "localstorageWrapper.txt").then(
+		        function (success) {
+		        	var objParam={};
+					try
+					{
+						objParam=JSON.parse(success);
+					}
+					catch(e)
+					{
+						console.log("Not parsable");
+					}
+					SettingsSrvc.setSettingsFromObj(objParam);
+		            detectandshow(deferred);
+		        }, function (error) {
+		            detectandshow(deferred);
+		        }
+		    );
+		}
+		else
+		{
+			deferred.resolve("Don't care");
+		}
+	    return deferred.promise;
+	 };
+	
+}]);
+*/
 
  yaoswa.directive("myWeatherHeader", [ function() {
 	return {
@@ -1984,8 +2154,69 @@ function ($scope,gettextCatalog,WeatherSrvc,HeaderSrvc,WeatherFact) {
 	
 }]);
 
-yaoswa.controller('AboutCtrl',['HeaderSrvc','$scope', function (HeaderSrvc,$scope) {
+yaoswa.controller('AboutCtrl',['HeaderSrvc','$scope','$cordovaInAppBrowser', function (HeaderSrvc,$scope,$cordovaInAppBrowser) {
 	HeaderSrvc.setShowBackButton(true);
+	
+	$scope.goto = function(key)
+	{
+		if(key=='cordova')
+		{
+			console.log(key);
+			$cordovaInAppBrowser.open('https://cordova.apache.org/', '_system')
+			.then(function(success) {
+				console.log(success);
+			},function(error) {
+				console.log(error);
+			});		
+					
+		}
+		else if(key=='owm')
+		{
+			console.log(key);
+			$cordovaInAppBrowser.open('http://openweathermap.org/', '_system')
+			.then(function(success) {
+				console.log(success);
+			},function(error) {
+				console.log(error);
+			});		
+			
+		}
+		else if(key=='angular')
+		{
+			console.log(key);
+			$cordovaInAppBrowser.open('https://angularjs.org/', '_system')
+			.then(function(success) {
+				console.log(success);
+			},function(error) {
+				console.log(error);
+			});		
+			
+		}
+		else if(key=='yaoswa')
+		{
+			console.log(key);
+			$cordovaInAppBrowser.open('https://github.com/Inglebard/YAOSWA', '_system')
+			.then(function(success) {
+				console.log(success);
+			},function(error) {
+				console.log(error);
+			});		
+		}
+		else if(key=='gpl2')
+		{
+			console.log(key);
+			$cordovaInAppBrowser.open('https://opensource.org/licenses/GPL-2.0', '_system')
+			.then(function(success) {
+				console.log(success);
+			},function(error) {
+				console.log(error);
+			});		
+			
+		}
+		//$cordovaInAppBrowser.close();
+		
+	};
+	
 }]);
 
 yaoswa.controller('SettingCtrl',['$scope','$location','$cordovaFile','HeaderSrvc','SettingsSrvc','amMoment','gettextCatalog', function ($scope,$location,$cordovaFile,HeaderSrvc,SettingsSrvc,amMoment,gettextCatalog) {
@@ -2120,14 +2351,15 @@ document.addEventListener('deviceready',_ready,false);
 //uncomment only for browser test
 //window.onload=_ready();
 function _ready() {	
+	
+	
 	if(!window.deviceReady)
 	{
-		/* Not necessary
+		/* Not necessary */
 		if(typeof(cordova)!=='undefined')
 		{
 			window.open = cordova.InAppBrowser.open;			
 		}
-		*/
 		
 		//TODO
 		// No seriously can do better ?
@@ -2156,5 +2388,18 @@ function _ready() {
 		}
 	}
 	window.deviceReady = true;
+	
+	/*
+	//Need improvement
+	if(!window.deviceReady)
+	{
+		if(typeof(cordova)!=='undefined')
+		{
+			window.open = cordova.InAppBrowser.open;			
+		}		
+		angular.bootstrap(document, ['yaoswa']);
+	}
+	window.deviceReady = true;
+	*/
 }
 
