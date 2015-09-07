@@ -125,14 +125,13 @@ footer {
 }
 */
 
-input[type="text"] {
+input {
     outline: none;
 }
 
 input[type="text"] {
     padding: 4px 0px 1px 4px;
     border-radius: 6px;
-    outline: none;
     border: solid 1px #DDDDDD;
     box-shadow: inset 1px 1px 1px 0px #AAAAAA;
 }
