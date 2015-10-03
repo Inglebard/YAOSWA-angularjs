@@ -137,6 +137,10 @@ yaoswa.run(function (gettextCatalog) {
 		"Languages" : "Langages",
 		"Application language" : "Langage de l'application",
 		"Weather Language" : "Langage de la météo",
+		"Others" : "Divers",
+		"Animations" : "Animations",
+		"Will use animated SVG files." : "Utilisera des fichiers SVG animés",
+		"Will use SVG files without animation." : "Utilisera des fichiers SVG sans animations",
 		"Save" : "Sauvegarder",		
 		"YAOSWA is a weather application created for ubuntu phone." : "YAOSWA est une application météo créé pour les téléphones Ubuntu.",
 		"This app is powered by" : "Cette application est propulsée par",
@@ -479,6 +483,7 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
     this.defaultCity="Limoges,FR";
     this.defaultIsAccurate=false;
     this.defaultIsGeolocate=false;
+    this.defaultIsAnimate=true;
     this.defaultTempUnitId=0;
     this.defaultSpeedUnitId=0;
     this.defaultAppLanguageId=0;
@@ -654,7 +659,7 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 		return [{
 				  id: 0,
 				  label: 'default',
-				  unit: 'Hpa'
+				  unit: 'hPa'
 				}];
 	};
 	
@@ -734,6 +739,35 @@ yaoswa.service('SettingsSrvc',['gettextCatalog', function(gettextCatalog) {
 	this.setIsGeolocate= function(isgeolocate)
 	{
 		this.settings.isgeolocate=isgeolocate;
+	};
+	
+	
+	this.getIsAnimate= function()
+	{
+		var isAnimate=this.settings.isanimate;
+		if(typeof(isAnimate)!=="undefined")
+		{
+			if(isAnimate==="true" || isAnimate === true)
+			{
+				return true;
+			}			
+			else if(isAnimate==="false" || isAnimate === false)
+			{
+				return false;
+			}
+			else
+			{
+				return  this.defaultIsAnimate;				
+			}
+		}
+		else
+		{
+			return  this.defaultIsAnimate;
+		}
+	};
+	this.setIsAnimate= function(isanimate)
+	{
+		this.settings.isanimate=isanimate;
 	};
 	
 	
@@ -1512,22 +1546,26 @@ yaoswa.service('UtilsSrvc', [ 'gettextCatalog','SettingsSrvc', function(gettextC
 		var color_gray="#808080";
 		var color_yellow="#E0B000";
 		var color_night="#41403b";
+		
 		var root_image = "img/weather_icon/";
-		var root_image_animate = "img/weather_icon_animate/";
+		var animate=SettingsSrvc.getIsAnimate();
+		if(animate)
+		{
+			root_image="img/weather_icon_animate/";
+		}
 		
-		
-		var image_cloud=root_image_animate+"icon_weather_cloud.svg";
-		var image_hard_cloud=root_image_animate+"icon_weather_hard_cloud.svg";
-		var image_mist=root_image_animate+"icon_weather_mist.svg";
-		var image_rain=root_image_animate+"icon_weather_rain.svg";
-		var image_drizzle=root_image_animate+"icon_weather_rainy.svg";
+		var image_cloud=root_image+"icon_weather_cloud.svg";
+		var image_hard_cloud=root_image+"icon_weather_hard_cloud.svg";
+		var image_mist=root_image+"icon_weather_mist.svg";
+		var image_rain=root_image+"icon_weather_rain.svg";
+		var image_drizzle=root_image+"icon_weather_rainy.svg";
 		var image_snow=root_image+"icon_weather_snow.svg";
-		var image_snowy=root_image_animate+"icon_weather_snowy.svg";
-		var image_moon_cloud=root_image_animate+"icon_weather_sun_cloud_night.svg";
-		var image_sun_cloud=root_image_animate+"icon_weather_sun_cloud.svg";
-		var image_moon=root_image_animate+"icon_weather_sun_night.svg";
-		var image_sun=root_image_animate+"icon_weather_sun.svg";
-		var image_thunderstorm=root_image_animate+"icon_weather_thunderstorm.svg";
+		var image_snowy=root_image+"icon_weather_snowy.svg";
+		var image_moon_cloud=root_image+"icon_weather_sun_cloud_night.svg";
+		var image_sun_cloud=root_image+"icon_weather_sun_cloud.svg";
+		var image_moon=root_image+"icon_weather_sun_night.svg";
+		var image_sun=root_image+"icon_weather_sun.svg";
+		var image_thunderstorm=root_image+"icon_weather_thunderstorm.svg";
 		
 		
 		var color = color_black;
@@ -2226,6 +2264,7 @@ yaoswa.controller('SettingCtrl',['$scope','$location','$cordovaFile','HeaderSrvc
 	$scope.accurate=SettingsSrvc.getIsAccurate();
 	$scope.geolocate=SettingsSrvc.getIsGeolocate();
 	$scope.nbCnt=SettingsSrvc.getCnt();
+	$scope.animate=SettingsSrvc.getIsAnimate();
 	
 	$scope.tempList=SettingsSrvc.getTempList();
 	$scope.speedList=SettingsSrvc.getSpeedList();
@@ -2300,6 +2339,18 @@ yaoswa.controller('SettingCtrl',['$scope','$location','$cordovaFile','HeaderSrvc
 				return gettextCatalog.getString("Max number of results if available : {{NUMBER}}.",{ NUMBER : String($scope.nbCnt).trim() });		
 			}
 		}
+		
+		if(key == "animate")
+		{
+			if($scope.animate === false)
+			{
+				return gettextCatalog.getString("Will use SVG files without animation.");
+			}
+			else
+			{
+				return gettextCatalog.getString("Will use animated SVG files.");
+			}
+		}
 		return null;
 	};
 	
@@ -2323,6 +2374,7 @@ yaoswa.controller('SettingCtrl',['$scope','$location','$cordovaFile','HeaderSrvc
 		SettingsSrvc.setCity(String($scope.city).trim());
 		SettingsSrvc.setIsAccurate($scope.accurate);
 		SettingsSrvc.setIsGeolocate($scope.geolocate);
+		SettingsSrvc.setIsAnimate($scope.animate);
 		SettingsSrvc.setTempUnitId($scope.tempUnit.id);
 		SettingsSrvc.setSpeedUnitId($scope.speedUnit.id);
 		SettingsSrvc.setAppLanguageId($scope.appLanguage.id);
@@ -2349,7 +2401,7 @@ yaoswa.controller('SettingCtrl',['$scope','$location','$cordovaFile','HeaderSrvc
 window.deviceReady = false;
 document.addEventListener('deviceready',_ready,false);
 //uncomment only for browser test
-//window.onload=_ready();
+window.onload=_ready();
 function _ready() {	
 	
 	

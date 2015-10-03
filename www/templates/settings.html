@@ -183,6 +183,55 @@
 					</div>
 				</div>
 				
+				<div class="setting_section_header">
+					<span translate>Localisation</span>
+				</div>
+				<div class="input_control_text">
+					<div class="input_control_text_label_desc_icon row" ng-click="toggleSettingData($event)">
+						<div class="col-xs-10 input_control_text_label_desc">
+							<div class="input_control_text_label">
+								<span translate>City</span>						
+							</div>
+							<div class="input_control_text_desc" ng-show="getDynamicDesc('city')"> 
+								<span>{{getDynamicDesc('city')}}</span>				
+							</div>
+						</div>
+						<div class="input_control_text_icon col-xs-2">
+							<div class="input_control_text_icon_wrapper pull-right">
+								<i class="fa fa-setting-chevron"></i>
+							</div>
+						</div>
+					</div>
+					<div class="input_control_text_data">
+						<input type="text" ng-model="city" ng-trim="true"/>
+					</div>
+				</div>
+				<div class="setting_section_header">
+					<span translate>Others</span>
+				</div>
+				<div class="input_control_checkbox">
+					<div class="input_control_checkbox_label_desc_data row">
+						<div class="col-xs-10 input_control_checkbox_label_desc">
+							<div class="input_control_checkbox_label">
+								<span translate>Animations</span>						
+							</div>
+							<div class="input_control_checkbox_desc" ng-show="getDynamicDesc('accurate')"> 
+								<span>{{getDynamicDesc('animate')}}</span>				
+							</div>
+						</div>
+						<div class="input_control_checkbox_data col-xs-2">
+							<div class="input_control_checkbox_input_wrapper checkbox_switch pull-right">			
+								<input name="animate_checkbox" id="animate_checkbox" type="checkbox" data-type="switch" ng-model="animate">					
+								<label for="animate_checkbox" >
+									<span class="toggle">
+										<span class="toggle-handle"></span>
+										<span class="toggle-bg"></span>
+									</span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="form_submit">
 					<button ng-click="saveSetting()" translate>Save</button>
 				</div>
