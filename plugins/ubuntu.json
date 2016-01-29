@@ -9,10 +9,6 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<preference name=\"AndroidPersistentFileLocation\" value=\"Internal\" />",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Geolocation\"><param policy_group=\"location\" policy_version=\"1\" /></feature>",
                             "count": 1
                         }
@@ -25,16 +21,16 @@
         "cordova-plugin-file": {
             "PACKAGE_NAME": "yaoswa.inglebard"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "yaoswa.inglebard"
-        },
         "cordova-plugin-globalization": {
             "PACKAGE_NAME": "yaoswa.inglebard"
         },
-        "cordova-plugin-inappbrowser": {
+        "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "yaoswa.inglebard"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "yaoswa.inglebard"
+        },
+        "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "yaoswa.inglebard"
         }
     },
