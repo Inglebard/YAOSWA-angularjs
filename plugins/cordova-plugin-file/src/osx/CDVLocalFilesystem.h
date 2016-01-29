@@ -17,15 +17,16 @@
  under the License.
  */
 
-#import <UIKit/UIKit.h>
-#import <Cordova/CDVPlugin.h>
-#import <Cordova/CDVWhitelist.h>
+#import "CDVFile.h"
 
-@interface CDVNavigationWhitelistPlugin : CDVPlugin {}
+@interface CDVLocalFilesystem : NSObject<CDVFileSystem> {
+    NSString *_name;
+    NSString *_fsRoot;
+}
 
-@property (nonatomic, readonly, strong) CDVWhitelist* whitelist; // readonly for public
+- (id) initWithName:(NSString *)name root:(NSString *)fsRoot;
++ (NSString*)getMimeTypeFromPath:(NSString*)fullPath;
 
-- (BOOL)shouldAllowNavigationToURL:(NSURL *)url;
-- (BOOL)shouldAllowRequestForURL:(NSURL *)url;
+@property (nonatomic,strong) NSString *fsRoot;
 
 @end
